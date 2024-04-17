@@ -1,17 +1,5 @@
 mod rego;
 mod cedar;
+pub use cedar::Engine as CedarEngine;
+pub use rego::Engine as RegoEngine;
 
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
