@@ -1,6 +1,5 @@
 /target
 /bindings/java/target
-<<<<<<< HEAD
 .idea
 .project
 .classpath
@@ -11,6 +10,3 @@
 /bindings/java/.classpath
 /bindings/java/.settings
 /bindings/java/.DS_Store
-=======
-/.idea
->>>>>>> 8b6a54a945654bca21596dfd3ec3fa8dc7a4c71c
