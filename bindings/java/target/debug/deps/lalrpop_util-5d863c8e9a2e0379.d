@@ -1,0 +1,9 @@
+/Users/gaosg/Projects/papl/bindings/java/target/debug/deps/liblalrpop_util-5d863c8e9a2e0379.rmeta: /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/lalrpop-util-0.20.2/src/lib.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/lalrpop-util-0.20.2/src/lexer.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/lalrpop-util-0.20.2/src/state_machine.rs
+
+/Users/gaosg/Projects/papl/bindings/java/target/debug/deps/liblalrpop_util-5d863c8e9a2e0379.rlib: /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/lalrpop-util-0.20.2/src/lib.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/lalrpop-util-0.20.2/src/lexer.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/lalrpop-util-0.20.2/src/state_machine.rs
+
+/Users/gaosg/Projects/papl/bindings/java/target/debug/deps/lalrpop_util-5d863c8e9a2e0379.d: /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/lalrpop-util-0.20.2/src/lib.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/lalrpop-util-0.20.2/src/lexer.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/lalrpop-util-0.20.2/src/state_machine.rs
+
+/Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/lalrpop-util-0.20.2/src/lib.rs:
+/Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/lalrpop-util-0.20.2/src/lexer.rs:
+/Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/lalrpop-util-0.20.2/src/state_machine.rs:
