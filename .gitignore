@@ -1,2 +1,12 @@
 /target
 /bindings/java/target
+.idea
+.project
+.classpath
+.settings
+.DS_Store
+/bindings/java/.idea
+/bindings/java/.project
+/bindings/java/.classpath
+/bindings/java/.settings
+/bindings/java/.DS_Store
