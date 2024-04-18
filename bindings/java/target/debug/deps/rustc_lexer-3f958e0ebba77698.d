@@ -1,9 +1,0 @@
-/Users/gaosg/Projects/papl/bindings/java/target/debug/deps/librustc_lexer-3f958e0ebba77698.rmeta: /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/rustc_lexer-0.1.0/src/lib.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/rustc_lexer-0.1.0/src/cursor.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/rustc_lexer-0.1.0/src/unescape.rs
-
-/Users/gaosg/Projects/papl/bindings/java/target/debug/deps/librustc_lexer-3f958e0ebba77698.rlib: /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/rustc_lexer-0.1.0/src/lib.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/rustc_lexer-0.1.0/src/cursor.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/rustc_lexer-0.1.0/src/unescape.rs
-
-/Users/gaosg/Projects/papl/bindings/java/target/debug/deps/rustc_lexer-3f958e0ebba77698.d: /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/rustc_lexer-0.1.0/src/lib.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/rustc_lexer-0.1.0/src/cursor.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/rustc_lexer-0.1.0/src/unescape.rs
-
-/Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/rustc_lexer-0.1.0/src/lib.rs:
-/Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/rustc_lexer-0.1.0/src/cursor.rs:
-/Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/rustc_lexer-0.1.0/src/unescape.rs:

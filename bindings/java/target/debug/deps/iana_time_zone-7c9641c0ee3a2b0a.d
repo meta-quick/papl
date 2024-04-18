@@ -1,9 +1,0 @@
-/Users/gaosg/Projects/papl/bindings/java/target/debug/deps/libiana_time_zone-7c9641c0ee3a2b0a.rmeta: /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/iana-time-zone-0.1.60/src/lib.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/iana-time-zone-0.1.60/src/ffi_utils.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/iana-time-zone-0.1.60/src/tz_macos.rs
-
-/Users/gaosg/Projects/papl/bindings/java/target/debug/deps/libiana_time_zone-7c9641c0ee3a2b0a.rlib: /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/iana-time-zone-0.1.60/src/lib.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/iana-time-zone-0.1.60/src/ffi_utils.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/iana-time-zone-0.1.60/src/tz_macos.rs
-
-/Users/gaosg/Projects/papl/bindings/java/target/debug/deps/iana_time_zone-7c9641c0ee3a2b0a.d: /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/iana-time-zone-0.1.60/src/lib.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/iana-time-zone-0.1.60/src/ffi_utils.rs /Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/iana-time-zone-0.1.60/src/tz_macos.rs
-
-/Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/iana-time-zone-0.1.60/src/lib.rs:
-/Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/iana-time-zone-0.1.60/src/ffi_utils.rs:
-/Users/gaosg/.local/share/mise/installs/rust/1.77.2/registry/src/index.crates.io-6f17d22bba15001f/iana-time-zone-0.1.60/src/tz_macos.rs:
