@@ -104,7 +104,7 @@ public class EngineTest extends TestCase
 
         String user = "User::\"alice\"";
         String action = "Action::\"view\"";
-        String resource = "File::\"93\"";
+        String resource = "File::\"91\"";
 
         String result = engine.authorize(user,action,resource,"{}");
         System.out.println(result);
