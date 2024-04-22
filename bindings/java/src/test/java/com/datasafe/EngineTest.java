@@ -19,6 +19,7 @@ package com.datasafe;
 import java.util.Map;
 import java.util.ArrayList;
 
+import com.datasafe.cedar.CedarEngine;
 import com.datasafe.papl.Engine;
 import com.datasafe.papl.EngineType;
 import com.datasafe.rego.QueryResults;
@@ -93,6 +94,20 @@ public class EngineTest extends TestCase
             QueryResults result = engine.evalQuery("data.test.message");
             System.out.println(result);
         }
+    }
+
+
+    public void test_cedar_engine(){
+        CedarEngine engine = new CedarEngine();
+
+        engine.addPolicy("permit(principal == User::\"alice\", action == Action::\"view\", resource == File::\"93\");");
+
+        String user = "User::\"alice\"";
+        String action = "Action::\"view\"";
+        String resource = "File::\"93\"";
+
+        String result = engine.authorize(user,action,resource,"{}");
+        System.out.println(result);
     }
 }
 

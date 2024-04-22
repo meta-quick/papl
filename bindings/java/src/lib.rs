@@ -217,6 +217,75 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeRegoEvalQuery<'local>
     }
 }
 
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeCedarAddPolicy<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    engine_ptr: jlong,
+    policy: JString<'local>,
+) {
+    let res = throw_err(env, |env| {
+        let engine = unsafe { &mut *(engine_ptr as *mut CedarEngine) };
+        let policy: String = env.get_string(&policy)?.into();
+        let results = engine.add_policy(policy)?;
+        Ok(())
+    });
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeCedarAddEntity<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    engine_ptr: jlong,
+    enitity: JString<'local>,
+) {
+    let res = throw_err(env, |env| {
+        let engine = unsafe { &mut *(engine_ptr as *mut CedarEngine) };
+        let enitity: String = env.get_string(&enitity)?.into();
+        let results = engine.add_entity(enitity.as_str());
+        Ok(())
+    });
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeCedarAuthorize<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    engine_ptr: jlong,
+    principal: JString<'local>,
+    action: JString<'local>,
+    resource: JString<'local>,
+    json_context: JString<'local>,
+) -> jstring{
+    let res = throw_err(env, |env| {
+        let engine = unsafe { &mut *(engine_ptr as *mut CedarEngine) };
+
+        let principal: String = env.get_string(&principal)?.into();
+        let action: String = env.get_string(&action)?.into();
+        let resource: String = env.get_string(&resource)?.into();
+        let json_context: String = env.get_string(&json_context)?.into();
+
+        let results = engine.authorize_request(principal, action, resource, json_context);
+
+        let decision = results.decision();
+        let decision = match decision {
+            cedar_policy::Decision::Deny => "DENY",
+            cedar_policy::Decision::Allow => "ALLOW",
+        };
+
+
+        let decision = env.new_string(&decision).unwrap();
+        Ok(decision.into_raw())
+    });
+
+    match res {
+        Ok(val) => {
+           val
+        },
+        Err(_) => JObject::null().into_raw(),
+    }
+}
+
 
 
 

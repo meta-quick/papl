@@ -4,7 +4,7 @@ java_run: lib
 .PHONY: lib
 
 javah:
-	javac -h . src/main/com/datasafe/papl/Engine.java
+	javac -h .  src/main/java/com/datasafe/papl/Engine.java src/main/java/com/datasafe/papl/EngineType.java
 
 lib:
 	cargo build

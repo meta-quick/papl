@@ -45,6 +45,9 @@ public class Engine implements AutoCloseable {
     private static native void nativeRegoAddPolicyFile(long enginePtr, String path);
     private static native void nativeRegoClearData(long enginePtr);
     private static native String nativeRegoEvalQuery(long enginePtr, String query);
+    private static native String nativeCedarAddPolicy(long enginePtr, String policy);
+    private static native String nativeCedarAddEntity(long enginePtr, String json_entity);
+    private static native String nativeCedarAuthorize(long enginePtr, String principal,String action,String resource,String json_context);
 
 
 
@@ -114,6 +117,18 @@ public class Engine implements AutoCloseable {
 
     public String regoEvalQuery(String query){
         return nativeRegoEvalQuery(enginePtr,query);
+    }
+
+    public void cedarAddPolicy(String polciy) {
+        nativeCedarAddPolicy(enginePtr,polciy);
+    }
+
+    public void cedarAddEntity(String json) {
+        nativeCedarAddEntity(enginePtr,json);
+    }
+
+    public String cedarAuthorize(String principal,String action,String resource,String json_context) {
+       return nativeCedarAuthorize(enginePtr,principal,action,resource,json_context);
     }
 
     @Override
