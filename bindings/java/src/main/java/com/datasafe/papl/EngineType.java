@@ -16,6 +16,10 @@
 
 package com.datasafe.papl;
 
+/**
+ * @author gaosg
+ */
+
 public enum EngineType {
     REGO,
     CEDAR

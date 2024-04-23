@@ -55,6 +55,22 @@
         </dependency>
     </dependencies>
 
+    <!--distribution configuration-->
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>私服正式包公共仓库</name>
+            <url>http://192.168.11.201:8081/repository/maven-releases/</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>私服快照包公共仓库</name>
+            <url>http://192.168.11.201:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
     <build>
         <resources>
             <resource>
