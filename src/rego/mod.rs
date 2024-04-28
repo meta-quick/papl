@@ -244,5 +244,24 @@ public_server[server] {                             # a server exists in the pub
 
         Ok(())
     }
+
+    #[test]
+    fn test_eval_coverage() -> Result<() > {
+        let mut engine = Engine::new();
+
+        engine.add_policy_from_string("hello.rego".to_string(),            r#"
+           package test
+           message = "Hello, World!"
+        "#.to_string());
+
+        // Evaluate the policy, fetch the message and print it.
+        let results = engine.eval_query("data.test.message".to_string(), false)?;
+        println!("{}", serde_json::to_string_pretty(&results)?);
+
+        let report = engine.engine.get_coverage_report()?;
+        println!("{}", report.to_colored_string()?);
+
+        Ok(())
+    }
 }
 
