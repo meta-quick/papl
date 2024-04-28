@@ -109,5 +109,15 @@ public class EngineTest extends TestCase
         String result = engine.authorize(user,action,resource,"{}");
         System.out.println(result);
     }
+
+    public void test_store() throws Exception {
+        CedarEngine engine = new CedarEngine();
+        engine.createStore("abc");
+        engine.storeSave("hello","world");
+        System.out.println(engine.storeGet("hello"));
+
+        engine.storeDelKey("hello");
+        engine.close();
+    }
 }
 

@@ -49,15 +49,28 @@ public class Engine implements AutoCloseable {
     private static native String nativeCedarAddEntity(long enginePtr, String json_entity);
     private static native String nativeCedarAuthorize(long enginePtr, String principal,String action,String resource,String json_context);
 
+    private static native long nativeNewStore(String path);
+    private static native long nativeNewMemoryStore();
+    private static native void nativeCloseStore(long conn);
+
+    private static native long nativeStoreSave(long conn, String key, String value);
+
+    private static native String nativeStoreGet(long conn, String key);
+
+    private static native long nativeStoreDelete(long conn, String key);
+
 
 
     private static native long nativeNewCedarEngine();
     private static native long nativeCloseCedarEngine(long enginePtr);
 
 
-    private ReentrantLock mutex = new ReentrantLock();
+    private final ReentrantLock mutex = new ReentrantLock();
 
     private long enginePtr = 0;
+
+    private final ReentrantLock store_mutex = new ReentrantLock();
+    private long storePtr = 0;
     private EngineType type = EngineType.REGO;
 
     public Engine(){
@@ -80,7 +93,6 @@ public class Engine implements AutoCloseable {
         }finally {
             mutex.unlock();
         }
-
     }
 
     public void regoAddPolicy(String path, String rego){
@@ -131,8 +143,70 @@ public class Engine implements AutoCloseable {
        return nativeCedarAuthorize(enginePtr,principal,action,resource,json_context);
     }
 
+    public void newFileStore(String path) {
+        try{
+            store_mutex.lock();
+            //If already created
+            if (storePtr != 0) {
+                nativeCloseStore(storePtr);
+                storePtr = 0;
+            }
+
+            storePtr = nativeNewStore(path);
+        }finally {
+            store_mutex.unlock();
+        }
+    }
+
+    public void newMemoryStore(){
+        try{
+            store_mutex.lock();
+            //If already created
+            if (storePtr != 0) {
+                nativeCloseStore(storePtr);
+                storePtr = 0;
+            }
+
+            storePtr = nativeNewMemoryStore();
+        }finally {
+            store_mutex.unlock();
+        }
+    }
+
+    public long storeSave(String key,String val){
+        if(storePtr != 0){
+            return nativeStoreSave(this.storePtr,key,val);
+        }
+        return 0;
+    }
+
+    public String storeGetKey(String key) {
+        if(storePtr != 0) {
+            return nativeStoreGet(this.storePtr, key);
+        }
+        return null;
+    }
+
+    public long storeDeleteKey(String key){
+        if(storePtr != 0) {
+            return nativeStoreDelete(this.storePtr, key);
+        }
+        return 0;
+    }
+
     @Override
     public void close() throws Exception {
+        //close store if any
+        if (storePtr != 0) {
+            try {
+                store_mutex.lock();
+                nativeCloseStore(storePtr);
+                storePtr = 0;
+            }finally {
+                store_mutex.unlock();
+            }
+        }
+
         if (enginePtr == 0) {
             return;
         }

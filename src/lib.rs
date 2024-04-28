@@ -14,6 +14,9 @@
 
 mod rego;
 mod cedar;
+mod store;
+
 pub use cedar::Engine as CedarEngine;
 pub use rego::Engine as RegoEngine;
+pub use store::SqliteStore as SqliteStore;
 

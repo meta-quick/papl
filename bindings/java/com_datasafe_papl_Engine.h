@@ -121,6 +121,54 @@ JNIEXPORT jstring JNICALL Java_com_datasafe_papl_Engine_nativeCedarAuthorize
 
 /*
  * Class:     com_datasafe_papl_Engine
+ * Method:    nativeNewStore
+ * Signature: (Ljava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_com_datasafe_papl_Engine_nativeNewStore
+  (JNIEnv *, jclass, jstring);
+
+/*
+ * Class:     com_datasafe_papl_Engine
+ * Method:    nativeNewMemoryStore
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_com_datasafe_papl_Engine_nativeNewMemoryStore
+  (JNIEnv *, jclass);
+
+/*
+ * Class:     com_datasafe_papl_Engine
+ * Method:    nativeCloseStore
+ * Signature: (J)V
+ */
+JNIEXPORT void JNICALL Java_com_datasafe_papl_Engine_nativeCloseStore
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     com_datasafe_papl_Engine
+ * Method:    nativeStoreSave
+ * Signature: (JLjava/lang/String;Ljava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_com_datasafe_papl_Engine_nativeStoreSave
+  (JNIEnv *, jclass, jlong, jstring, jstring);
+
+/*
+ * Class:     com_datasafe_papl_Engine
+ * Method:    nativeStoreGet
+ * Signature: (JLjava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_datasafe_papl_Engine_nativeStoreGet
+  (JNIEnv *, jclass, jlong, jstring);
+
+/*
+ * Class:     com_datasafe_papl_Engine
+ * Method:    nativeStoreDelete
+ * Signature: (JLjava/lang/String;)J
+ */
+JNIEXPORT jlong JNICALL Java_com_datasafe_papl_Engine_nativeStoreDelete
+  (JNIEnv *, jclass, jlong, jstring);
+
+/*
+ * Class:     com_datasafe_papl_Engine
  * Method:    nativeNewCedarEngine
  * Signature: ()J
  */

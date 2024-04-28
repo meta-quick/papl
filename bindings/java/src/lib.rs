@@ -286,6 +286,154 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeCedarAuthorize<'local
     }
 }
 
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeNewStore<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    path: JString<'local>,
+) -> jlong {
+    let result = throw_err(env, |env| {
+        let path: String = env.get_string(&path)?.into();
+        let sqlite = SqliteStore::new(&path);
+
+        match sqlite {
+            Ok(store) => {
+                let store = Box::into_raw(Box::new(store)) as jlong;
+                Ok(store)
+            },
+            Err(e) => {
+                Ok(-1)
+            }
+        }
+    });
+
+    match result {
+        Ok(val) => val,
+        Err(_) => 0,
+    }
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeNewMemoryStore<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+) -> jlong {
+    let result = throw_err(env, |env| {
+        let memory = SqliteStore::new_in_memory();
+
+        match memory {
+            Ok(store) => {
+                let store = Box::into_raw(Box::new(store)) as jlong;
+                Ok(store)
+            },
+            Err(e) => {
+                Ok(-1)
+            }
+        }
+    });
+
+    match result {
+        Ok(val) => val,
+        Err(_) =>0,
+    }
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreSave<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    store_ptr: jlong,
+    key: JString<'local>,
+    value: JString<'local>,
+) -> jlong {
+    let res = throw_err(env, |env| {
+        let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
+        let key: String = env.get_string(&key)?.into();
+        let value: String = env.get_string(&value)?.into();
+        let results = store.save(key, value);
+        match results {
+            Ok(val) => {
+                Ok(val as jlong)
+            },
+            Err(e) => {
+                Ok(0)
+            }
+        }
+    });
+    match res {
+        Ok(val) => val,
+        Err(_) => 0,
+    }
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreGet<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    store_ptr: jlong,
+    key: JString<'local>,
+) -> jstring {
+    let res = throw_err(env, |env| {
+        let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
+        let key: String = env.get_string(&key)?.into();
+        let results = store.get(key);
+
+        match results {
+            Ok(val) => {
+                let val = env.new_string(val).unwrap();
+                Ok(val.into_raw())
+            },
+            Err(e) => {
+                Ok(JObject::null().into_raw())
+            }
+        }
+    });
+
+    match res {
+        Ok(val) => val,
+        Err(_) => JObject::null().into_raw(),
+    }
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreDelete<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    store_ptr: jlong,
+    key: JString<'local>,
+) -> jlong {
+    let res = throw_err(env, |env| {
+        let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
+        let key: String = env.get_string(&key)?.into();
+        let results = store.delete(key);
+
+        match results {
+            Ok(val) => {
+                Ok(val as jlong)
+            },
+            Err(e) => {
+                Ok(0)
+            }
+        }
+    });
+
+    match res {
+        Ok(val) => val,
+        Err(_) => 0,
+    }
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeCloseStore<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    store_ptr: jlong,
+) {
+    unsafe {
+        let _engine = Box::from_raw(store_ptr as *mut SqliteStore);
+        _engine.close();
+    }
+}
 
 
 
