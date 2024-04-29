@@ -72,6 +72,8 @@ public class FolderRegoPolicy {
             }
             if (isRecursive) {
                 engine.addJSONData("{\"isRecursive\": true}");
+            }else {
+                engine.addJSONData("{\"isRecursive\": false}");
             }
 
             ENGINE_INSTANCE_CACHE.put(path,engine);
@@ -82,6 +84,8 @@ public class FolderRegoPolicy {
             }
             if (isRecursive) {
                 engine.addJSONData("{\"isRecursive\": true}");
+            } else {
+                engine.addJSONData("{\"isRecursive\": false}");
             }
         }
 
