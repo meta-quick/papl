@@ -14,11 +14,11 @@ public class FolderRegoPolicyTest extends TestCase {
         policy.prepare("a/b/c.txt","package policy\ndefault allow := false\n");
         policy.prepare("a/b/","package policy\ndefault allow := true\n");
 
-        ResultSet r = policy.eval("data.policy.allow","a/b/c.txt","{}");
+        ResultSet r = policy.eval("data.policy.allow","a/b/c.txt","{}","{}");
         System.out.println(r);
-        r = policy.eval("data.policy.allow","a/b/","{}");
+        r = policy.eval("data.policy.allow","a/b/","{}","{}");
         System.out.println(r);
-        r = policy.eval("data.policy.list","a/b/","{}");
+        r = policy.eval("data.policy.list","a/b/","{}","{}");
         System.out.println(r);
     }
 
@@ -27,7 +27,7 @@ public class FolderRegoPolicyTest extends TestCase {
         FolderRegoPolicy policy = new FolderRegoPolicy(store);
         policy.prepare("a/b/c.txt","package policy\ndefault allow := false\n");
         policy.prepare("a/b/","package policy\ndefault list := true\n");
-        ResultSet r = policy.foldEval("data.policy.list","a/b/c.txt","{}");
+        ResultSet r = policy.foldEval("data.policy.list","a/b/c.txt","{}","{}");
         System.out.println(r.toExpression()[0].value);
     }
 }

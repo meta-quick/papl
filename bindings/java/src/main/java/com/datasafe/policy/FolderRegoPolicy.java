@@ -41,6 +41,10 @@ public class FolderRegoPolicy {
         store.save(path,policy);
     }
 
+    public void prepareData(String path,String policy){
+        store.save(path,policy);
+    }
+
     /**
      * Eval a query per given input
      * @param query  a string like data.policy.[action]
@@ -48,7 +52,7 @@ public class FolderRegoPolicy {
      * @param inputJSON
      * @return
      */
-    public ResultSet eval(String query, String path, String inputJSON){
+    public ResultSet eval(String query, String path, String inputJSON,String data){
         //find if engine cached
         RegoEngine engine = ENGINE_INSTANCE_CACHE.get(path);
         if (engine == null) {
@@ -62,6 +66,11 @@ public class FolderRegoPolicy {
             //initial and cache engine
             engine = new RegoEngine();
             engine.addPolicy(path,policy);
+            engine.clearData();
+            if (data != null && !data.isEmpty()){
+                engine.addJSONData(data);
+            }
+
             ENGINE_INSTANCE_CACHE.put(path,engine);
         }
 
@@ -74,13 +83,13 @@ public class FolderRegoPolicy {
         return resultset;
     }
 
-    public ResultSet foldEval(String query,String path,String input){
+    public ResultSet foldEval(String query,String path,String input,String jsonData){
         //Create path from given path
         Path parent = Paths.get(path);
 
         boolean isDecided = false;
         while (!isDecided){
-            ResultSet rs = eval(query,path,input);
+            ResultSet rs = eval(query,path,input,jsonData);
             if (rs.status == ResultStatus.OK){
                 if (rs.result == null || rs.result.getResult() == null) {
                     parent = parent.getParent();
