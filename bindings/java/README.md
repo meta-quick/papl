@@ -21,7 +21,7 @@ With Maven:
     <dependency>
         <groupId>com.datasafe.papl</groupId>
         <artifactId>papl-binding-java</artifactId>
-        <version>0.0.1</version>
+        <version>0.1.1</version>
     </dependency>
 </dependencies>
 ```
