@@ -14,9 +14,21 @@
  * limitations under the License.
  */
 
-package com.datasafe.rego;
+package com.datasafe;
 
-import cn.hutool.json.JSONObject;
+import com.datasafe.papl.FileStore;
+import com.datasafe.papl.MemoryStore;
+import junit.framework.TestCase;
 
-public class Value extends JSONObject {
+public class FileStoreTest extends TestCase {
+    public void test_memory_store() throws Exception {
+        FileStore store = new FileStore("hello");
+
+        store.save("hello","world");
+        String world = store.get("hello");
+        System.out.println(world);
+        store.delete("hello");
+        world = store.get("hello");
+        System.out.println(world);
+    }
 }

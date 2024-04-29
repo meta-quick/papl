@@ -49,15 +49,15 @@ public class Engine implements AutoCloseable {
     private static native String nativeCedarAddEntity(long enginePtr, String json_entity);
     private static native String nativeCedarAuthorize(long enginePtr, String principal,String action,String resource,String json_context);
 
-    private static native long nativeNewStore(String path);
-    private static native long nativeNewMemoryStore();
-    private static native void nativeCloseStore(long conn);
+    public static native long nativeNewStore(String path);
+    public static native long nativeNewMemoryStore();
+    public static native void nativeCloseStore(long conn);
 
-    private static native long nativeStoreSave(long conn, String key, String value);
+    public static native long nativeStoreSave(long conn, String key, String value);
 
-    private static native String nativeStoreGet(long conn, String key);
+    public static native String nativeStoreGet(long conn, String key);
 
-    private static native long nativeStoreDelete(long conn, String key);
+    public static native long nativeStoreDelete(long conn, String key);
 
 
 

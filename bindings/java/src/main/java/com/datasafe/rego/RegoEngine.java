@@ -99,7 +99,6 @@ public class RegoEngine implements AutoCloseable{
 
     public QueryResults evalQuery(String query){
         String result = engine.regoEvalQuery(query);
-        System.out.println(result);
         Gson gson = new Gson();
         QueryResults results = gson.fromJson(result, QueryResults.class);
         return results;
