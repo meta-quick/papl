@@ -76,6 +76,7 @@ public class FolderRegoPolicy {
 
             ENGINE_INSTANCE_CACHE.put(path,engine);
         }else {
+            engine.clearData();
             if (data != null && !data.isEmpty()){
                 engine.addJSONData(data);
             }
