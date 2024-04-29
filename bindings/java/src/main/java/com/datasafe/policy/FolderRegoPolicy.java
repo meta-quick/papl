@@ -52,7 +52,7 @@ public class FolderRegoPolicy {
      * @param inputJSON
      * @return
      */
-    public ResultSet eval(String query, String path, String inputJSON,String data){
+    public ResultSet eval(String query, String path, String inputJSON,String data,Boolean isRecursive){
         //find if engine cached
         RegoEngine engine = ENGINE_INSTANCE_CACHE.get(path);
         if (engine == null) {
@@ -70,8 +70,18 @@ public class FolderRegoPolicy {
             if (data != null && !data.isEmpty()){
                 engine.addJSONData(data);
             }
+            if (isRecursive) {
+                engine.addJSONData("{\"isRecursive\": true}");
+            }
 
             ENGINE_INSTANCE_CACHE.put(path,engine);
+        }else {
+            if (data != null && !data.isEmpty()){
+                engine.addJSONData(data);
+            }
+            if (isRecursive) {
+                engine.addJSONData("{\"isRecursive\": true}");
+            }
         }
 
         engine.setJSONInput(inputJSON);
@@ -88,8 +98,9 @@ public class FolderRegoPolicy {
         Path parent = Paths.get(path);
 
         boolean isDecided = false;
+        boolean isRecursive = false;
         while (!isDecided){
-            ResultSet rs = eval(query,path,input,jsonData);
+            ResultSet rs = eval(query,path,input,jsonData,isRecursive);
             if (rs.status == ResultStatus.OK){
                 if (rs.result == null || rs.result.getResult() == null) {
                     parent = parent.getParent();
@@ -98,6 +109,7 @@ public class FolderRegoPolicy {
                     }
 
                     path = parent.toString() + "/";
+                    isRecursive = true;
                     continue;
                 }
                 isDecided = true;
@@ -109,6 +121,7 @@ public class FolderRegoPolicy {
                     break;
                 }
                 path = parent.toString() + "/";
+                isRecursive = true;
             }
         }
 
