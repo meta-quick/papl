@@ -39,6 +39,7 @@ public class FolderRegoPolicy {
 
     public void prepare(String path,String policy){
         store.save(path,policy);
+        evictEngine(path);
     }
 
     public void prepareData(String path,String policy){
@@ -96,6 +97,10 @@ public class FolderRegoPolicy {
         resultset.result = result;
 
         return resultset;
+    }
+
+    public void evictEngine(String path){
+        ENGINE_INSTANCE_CACHE.remove(path);
     }
 
     public ResultSet foldEval(String query,String path,String input,String jsonData){
