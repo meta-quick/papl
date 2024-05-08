@@ -17,14 +17,24 @@ use regorus;
 use regorus::QueryResults;
 
 pub struct Engine {
-    pub engine: regorus::Engine
+    pub engine: regorus::Engine,
+    #[cfg(feature = "coverage")]
+    pub enable_coverage: bool
 }
 
 impl Engine {
-    pub fn new() -> Self {
+    pub fn new(enable_coverage: bool) -> Self {
         let mut engine = Self {
-            engine: regorus::Engine::new()
+            engine: regorus::Engine::new(),
+            #[cfg(feature = "coverage")]
+            enable_coverage
         };
+
+        #[cfg(feature = "coverage")]
+        if enable_coverage {
+            engine.engine.set_enable_coverage(true);
+        }
+
         engine.engine.set_strict_builtin_errors(true);
         engine
     }
@@ -143,7 +153,7 @@ mod tests {
 
     #[test]
     fn test_eval_query() {
-        let mut engine = Engine::new();
+        let mut engine = Engine::new(true);
 
         let input = r#"
 {
@@ -177,6 +187,10 @@ allow := true {                                     # allow is true if...
     count(violation) == 0                           # there are zero violations.
 }
 
+xx := true {                                     # allow is true if...
+    1 < 2                                           # there are zero violations.
+}
+
 violation[server.id] {                              # a server is in the violation set if...
     some server
     public_server[server]                           # it exists in the 'public_server' set and...
@@ -200,9 +214,19 @@ public_server[server] {                             # a server exists in the pub
         let _=  engine.add_input_json(Some(input.to_string()));
         engine.add_policy_from_string("regox.rego".to_string(),policy.to_string()).unwrap();
 
-        let result = engine.eval_query("data.example.violation".to_string(), true);
+        let result = engine.eval_query("data.example.allow".to_string(), true);
 
         println!("{}", serde_json::to_string_pretty(&result.unwrap()).unwrap());
+
+        let report = engine.engine.get_coverage_report();
+        match report {
+            Ok(report) => {
+                println!("{}", report.to_colored_string().unwrap());
+            }
+            Err(err) => {
+                println!("{}", err);
+            }
+        }
     }
 
     #[test]
@@ -231,7 +255,7 @@ public_server[server] {                             # a server exists in the pub
 
     #[test]
     fn test_eval_xquery() -> Result<() > {
-        let mut engine = Engine::new();
+        let mut engine = Engine::new(false);
 
         engine.add_policy_from_string("hello.rego".to_string(),            r#"
            package test
@@ -247,7 +271,7 @@ public_server[server] {                             # a server exists in the pub
 
     #[test]
     fn test_eval_coverage() -> Result<() > {
-        let mut engine = Engine::new();
+        let mut engine = Engine::new(true);
 
         engine.add_policy_from_string("hello.rego".to_string(),            r#"
            package test
@@ -255,7 +279,7 @@ public_server[server] {                             # a server exists in the pub
         "#.to_string());
 
         // Evaluate the policy, fetch the message and print it.
-        let results = engine.eval_query("data.test.message".to_string(), false)?;
+        let results = engine.eval_query("data.test.message".to_string(),false)?;
         println!("{}", serde_json::to_string_pretty(&results)?);
 
         let report = engine.engine.get_coverage_report()?;

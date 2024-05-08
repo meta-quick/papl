@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use std::ptr::{addr_of, slice_from_raw_parts_mut};
 use anyhow::Result;
 use jni::objects::{JClass, JObject, JString,JObjectArray};
 use jni::sys::{jlong, jstring};
@@ -56,7 +57,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeNewRegoEngine(
     _env: JNIEnv,
     _class: JClass,
 ) -> jlong {
-    let engine = RegoEngine::new();
+    let engine = RegoEngine::new(false);
     Box::into_raw(Box::new(engine)) as jlong
 }
 
