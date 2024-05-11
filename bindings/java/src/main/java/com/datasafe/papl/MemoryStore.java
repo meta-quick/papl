@@ -29,7 +29,7 @@ public class MemoryStore implements IStore {
 
     @Override
     public void save(String key,String value){
-        if (handle == 0){
+        if (handle == 0 || handle == -1){
             return;
         }
         Engine.nativeStoreSave(this.handle,key,value);
@@ -37,7 +37,7 @@ public class MemoryStore implements IStore {
 
     @Override
     public void delete(String key) {
-        if (handle == 0){
+        if (handle == 0 || handle == -1){
             return;
         }
         Engine.nativeStoreDelete(handle,key);
@@ -45,7 +45,7 @@ public class MemoryStore implements IStore {
 
     @Override
     public String get(String key){
-        if (handle == 0){
+        if (handle == 0 || handle == -1){
             return null;
         }
         return Engine.nativeStoreGet(handle,key);
@@ -53,7 +53,7 @@ public class MemoryStore implements IStore {
 
     @Override
     public void close() throws Exception {
-        if (handle == 0){
+        if (handle == 0 || handle == -1){
             return;
         }
         Engine.nativeCloseStore(handle);

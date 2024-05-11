@@ -16,6 +16,7 @@
 
 package com.datasafe;
 
+import com.datasafe.papl.FileStore;
 import com.datasafe.papl.IStore;
 import com.datasafe.papl.MemoryStore;
 import com.datasafe.policy.FolderRegoPolicy;
@@ -47,5 +48,14 @@ public class FolderRegoPolicyTest extends TestCase {
         System.out.println(r.toExpression()[0].value);
         r = policy.foldEval("data.isRecursive","a/b/c.txt","{}","{}");
         System.out.println(r.toExpression()[0].value);
+    }
+
+    public void test_storage() {
+        try(IStore store = new FileStore("/aaa/aa.db")) {
+            store.save("a/b/c","{}");
+            System.out.println(store.get("a/b/c"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

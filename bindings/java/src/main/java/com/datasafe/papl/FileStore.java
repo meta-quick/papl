@@ -16,19 +16,41 @@
 
 package com.datasafe.papl;
 
+import java.io.File;
+
 /**
  * @author gaosg
  */
 public class FileStore implements IStore {
     private long handle = 0;
 
-    public FileStore(String path) {
+    public static boolean ensureParentFolderExists(String filePath) {
+        File f = new File(filePath);
+        String parent = f.getParent();
+        if(parent != null && !parent.isEmpty()) {
+            File fParent = new File(parent);
+            if (!fParent.exists()) {
+                return fParent.mkdirs();
+            }
+        }
+        return true;
+    }
+
+    public FileStore(String path) throws Exception {
+        //Ensure that the path exists using JDK8
+        if(!ensureParentFolderExists(path)) {
+            throw new Exception("Folder does not exist at: " + path);
+        }
+
         handle = Engine.nativeNewStore(path);
+        if (handle == 0 || handle == -1){
+            throw new Exception("Failed to create store");
+        }
     }
 
     @Override
     public void save(String key,String value){
-        if (handle == 0){
+        if (handle == 0 || handle == -1){
             return;
         }
         Engine.nativeStoreSave(this.handle,key,value);
@@ -36,7 +58,7 @@ public class FileStore implements IStore {
 
     @Override
     public void delete(String key) {
-        if (handle == 0){
+        if (handle == 0 || handle == -1){
             return;
         }
         Engine.nativeStoreDelete(handle,key);
@@ -44,7 +66,7 @@ public class FileStore implements IStore {
 
     @Override
     public String get(String key){
-        if (handle == 0){
+        if (handle == 0 || handle == -1){
             return null;
         }
         return Engine.nativeStoreGet(handle,key);
@@ -52,7 +74,7 @@ public class FileStore implements IStore {
 
     @Override
     public void close() throws Exception {
-        if (handle == 0){
+        if (handle == 0 || handle == -1){
             return;
         }
         Engine.nativeCloseStore(handle);
