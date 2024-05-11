@@ -51,8 +51,8 @@ public class FolderRegoPolicyTest extends TestCase {
     }
 
     public void test_storage() {
-        try(IStore store = new FileStore("/aaa/aa.db")) {
-            store.save("a/b/c","{}");
+        try(IStore store = new FileStore("aaa/aa.db")) {
+            store.save("a/b/c","{THIS IS DEMO}");
             System.out.println(store.get("a/b/c"));
         } catch (Exception e) {
             e.printStackTrace();

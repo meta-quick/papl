@@ -25,6 +25,10 @@ public class FileStore implements IStore {
     private long handle = 0;
 
     public static boolean ensureParentFolderExists(String filePath) {
+        if (filePath == null || filePath.isEmpty()) {
+            return false;
+        }
+
         File f = new File(filePath);
         String parent = f.getParent();
         if(parent != null && !parent.isEmpty()) {
