@@ -118,7 +118,8 @@ public class FolderRegoPolicy {
                         break;
                     }
 
-                    path = parent.toString() + "/";
+                    path = parent.toString().replace("\\","/") + "/";
+
                     isRecursive = true;
                     continue;
                 }
@@ -130,7 +131,7 @@ public class FolderRegoPolicy {
                 if (parent == null){
                     break;
                 }
-                path = parent.toString() + "/";
+                path = parent.toString().replace("\\","/") + "/";
                 isRecursive = true;
             }
         }
