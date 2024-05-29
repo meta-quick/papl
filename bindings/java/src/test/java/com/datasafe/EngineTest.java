@@ -113,7 +113,9 @@ public class EngineTest extends TestCase
     public void test_store() throws Exception {
         CedarEngine engine = new CedarEngine();
         engine.createStore("abc");
-        engine.storeSave("hello","world");
+        engine.storeSave("hello","world","1");
+        System.out.println(engine.storeGet("hello"));
+
         System.out.println(engine.storeGet("hello"));
 
         engine.storeDelKey("hello");

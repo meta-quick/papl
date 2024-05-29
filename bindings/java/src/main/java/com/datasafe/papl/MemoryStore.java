@@ -28,11 +28,11 @@ public class MemoryStore implements IStore {
     }
 
     @Override
-    public void save(String key,String value){
+    public void save(String key,String value,String version){
         if (handle == 0 || handle == -1){
             return;
         }
-        Engine.nativeStoreSave(this.handle,key,value);
+        Engine.nativeStoreSave(this.handle,key,value,version);
     }
 
     @Override
@@ -49,6 +49,26 @@ public class MemoryStore implements IStore {
             return null;
         }
         return Engine.nativeStoreGet(handle,key);
+    }
+
+    @Override
+    public String version(String key) {
+        if (handle == 0 || handle == -1){
+            return null;
+        }
+        return Engine.nativeStoreGetVersion(handle,key);
+    }
+
+    @Override
+    public String[] versionValue(String key) {
+        if (handle == 0 || handle == -1){
+            return null;
+        }
+        String value = Engine.nativeStoreGetVersionValue(handle, key);
+        if(value != null) {
+            return value.split("<--->");
+        }
+        return null;
     }
 
     @Override

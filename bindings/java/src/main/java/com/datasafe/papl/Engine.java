@@ -53,9 +53,13 @@ public class Engine implements AutoCloseable {
     public static native long nativeNewMemoryStore();
     public static native void nativeCloseStore(long conn);
 
-    public static native long nativeStoreSave(long conn, String key, String value);
+    public static native long nativeStoreSave(long conn, String key, String value,String version);
 
     public static native String nativeStoreGet(long conn, String key);
+
+    public static native String nativeStoreGetVersion(long conn, String key);
+
+    public static native String nativeStoreGetVersionValue(long conn, String key);
 
     public static native long nativeStoreDelete(long conn, String key);
 
@@ -173,9 +177,9 @@ public class Engine implements AutoCloseable {
         }
     }
 
-    public long storeSave(String key,String val){
+    public long storeSave(String key,String value, String version){
         if(storePtr != 0){
-            return nativeStoreSave(this.storePtr,key,val);
+            return nativeStoreSave(this.storePtr,key,value,version);
         }
         return 0;
     }
@@ -183,6 +187,25 @@ public class Engine implements AutoCloseable {
     public String storeGetKey(String key) {
         if(storePtr != 0) {
             return nativeStoreGet(this.storePtr, key);
+        }
+        return null;
+    }
+
+    public String[] storeGetVersionValue(String key) {
+        if(storePtr != 0) {
+            String value = nativeStoreGetVersionValue(this.storePtr, key);
+            if(value != null) {
+                return value.split("<--->");
+            }
+            return null;
+        }
+        return null;
+    }
+
+    public String storeGetVersion(String key) {
+        if(storePtr != 0) {
+            return nativeStoreGetVersion(this.storePtr, key);
+
         }
         return null;
     }

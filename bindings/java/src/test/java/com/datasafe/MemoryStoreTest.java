@@ -24,9 +24,14 @@ public class MemoryStoreTest extends TestCase {
     public void test_memory_store() throws Exception {
         MemoryStore store = new MemoryStore();
 
-        store.save("hello","world");
+        store.save("hello","world","1");
         String world = store.get("hello");
         System.out.println(world);
+        System.out.println(store.version("hello"));
+
+        System.out.println(store.versionValue("hello")[1]);
+        System.out.println(store.versionValue("hello")[0]);
+
         store.delete("hello");
         world = store.get("hello");
         System.out.println(world);

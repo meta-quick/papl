@@ -43,6 +43,7 @@ impl SqliteStore {
                 "CREATE TABLE policy (
                     id INTEGER PRIMARY KEY,
                     key TEXT NOT NULL,
+                    version TEXT NOT NULL,
                     policy TEXT NOT NULL
                 )",
                 (), // empty list of parameters.
@@ -60,6 +61,7 @@ impl SqliteStore {
                 "CREATE TABLE policy (
                     id INTEGER PRIMARY KEY,
                     key TEXT NOT NULL,
+                    version TEXT NOT NULL,
                     policy TEXT NOT NULL
                 )",
                 (), // empty list of parameters.
@@ -69,11 +71,11 @@ impl SqliteStore {
         Ok(SqliteStore { conn })
     }
 
-    pub fn save(&self, key: String, policy: String) -> Result<usize> {
+    pub fn save(&self, key: String, policy: String, version: String) -> Result<usize> {
         let conn = &self.conn;
         //update if key exists
-        let mut stmt = conn.prepare("UPDATE policy SET policy = ?1 WHERE key = ?2")?;
-        let result = stmt.execute(&[&policy, &key]);
+        let mut stmt = conn.prepare("UPDATE policy SET policy = ?1, version = ?2 WHERE key = ?3")?;
+        let result = stmt.execute(&[&policy,&version, &key]);
 
         if let Ok(result) = result {
             if result > 0 {
@@ -82,8 +84,8 @@ impl SqliteStore {
         }
 
         //insert if key does not exist
-        let mut stmt = conn.prepare("INSERT INTO policy (key, policy) VALUES (?1, ?2)")?;
-        let result = stmt.execute(&[&key, &policy]);
+        let mut stmt = conn.prepare("INSERT INTO policy (key,version, policy) VALUES (?1, ?2, ?3)")?;
+        let result = stmt.execute(&[&key, &version, &policy]);
         result
     }
 
@@ -97,6 +99,37 @@ impl SqliteStore {
             if let Ok(Some(row)) = rows.next() {
                 let policy: String = row.get(0)?;
                 return Ok(policy);
+            }
+        }
+        return Err(rusqlite::Error::QueryReturnedNoRows);
+    }
+
+    pub fn version(&self, key: String) -> Result<String> {
+        let conn = &self.conn;
+        let mut stmt = conn.prepare("SELECT version FROM policy WHERE key = ?")?;
+        let mut rows = stmt.query(&[&key]);
+
+
+        if let Ok(mut rows) = rows {
+            if let Ok(Some(row)) = rows.next() {
+                let version: String = row.get(0)?;
+                return Ok(version);
+            }
+        }
+        return Err(rusqlite::Error::QueryReturnedNoRows);
+    }
+
+    pub fn version_value(&self, key: String) -> Result<(String,String)> {
+        let conn = &self.conn;
+        let mut stmt = conn.prepare("SELECT policy,version FROM policy WHERE key = ?")?;
+        let mut rows = stmt.query(&[&key]);
+
+
+        if let Ok(mut rows) = rows {
+            if let Ok(Some(row)) = rows.next() {
+                let policy: String = row.get(0)?;
+                let version: String = row.get(1)?;
+                return Ok((policy,version));
             }
         }
         return Err(rusqlite::Error::QueryReturnedNoRows);

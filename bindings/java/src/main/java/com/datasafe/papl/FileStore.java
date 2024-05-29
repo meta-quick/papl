@@ -53,11 +53,11 @@ public class FileStore implements IStore {
     }
 
     @Override
-    public void save(String key,String value){
+    public void save(String key,String value,String version){
         if (handle == 0 || handle == -1){
             return;
         }
-        Engine.nativeStoreSave(this.handle,key,value);
+        Engine.nativeStoreSave(this.handle,key,value,version);
     }
 
     @Override
@@ -82,5 +82,25 @@ public class FileStore implements IStore {
             return;
         }
         Engine.nativeCloseStore(handle);
+    }
+
+    @Override
+    public String version(String key) {
+        if (handle == 0 || handle == -1){
+            return null;
+        }
+        return Engine.nativeStoreGetVersion(handle,key);
+    }
+
+    @Override
+    public String[] versionValue(String key) {
+        if (handle == 0 || handle == -1){
+            return null;
+        }
+        String value = Engine.nativeStoreGetVersionValue(handle, key);
+        if(value != null) {
+            return value.split("<--->");
+        }
+        return null;
     }
 }

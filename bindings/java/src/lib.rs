@@ -15,7 +15,7 @@
 use std::ptr::{addr_of, slice_from_raw_parts_mut};
 use anyhow::Result;
 use jni::objects::{JClass, JObject, JString,JObjectArray};
-use jni::sys::{jlong, jstring};
+use jni::sys::{jlong, jobjectArray, jstring};
 use jni::JNIEnv;
 use papl::*;
 
@@ -346,12 +346,15 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreSave<'local>(
     store_ptr: jlong,
     key: JString<'local>,
     value: JString<'local>,
+    version: JString<'local>,
 ) -> jlong {
     let res = throw_err(env, |env| {
         let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
         let key: String = env.get_string(&key)?.into();
         let value: String = env.get_string(&value)?.into();
-        let results = store.save(key, value);
+        let version: String = env.get_string(&version)?.into();
+
+        let results = store.save(key, value,version);
         match results {
             Ok(val) => {
                 Ok(val as jlong)
@@ -436,5 +439,63 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeCloseStore<'local>(
     }
 }
 
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreGetVersionValue<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    store_ptr: jlong,
+    key: JString<'local>,
+) -> jstring {
+    let res = throw_err(env, |env| {
+        let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
+        let key: String = env.get_string(&key)?.into();
+        let results = store.version_value(key);
+
+        match results {
+            Ok((policy,version)) => {
+                let val = format!("{}<--->{}", policy, version);
+                let val = env.new_string(val).unwrap();
+                Ok(val.into_raw())
+            },
+            Err(e) => {
+                Ok(JObject::null().into_raw())
+            }
+        }
+    });
+
+    match res {
+        Ok(val) => val,
+        Err(_) => JObject::null().into_raw(),
+    }
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreGetVersion<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    store_ptr: jlong,
+    key: JString<'local>,
+) -> jstring {
+    let res = throw_err(env, |env| {
+        let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
+        let key: String = env.get_string(&key)?.into();
+        let results = store.version(key);
+
+        match results {
+            Ok(val) => {
+                let val = env.new_string(val).unwrap();
+                Ok(val.into_raw())
+            },
+            Err(e) => {
+                Ok(JObject::null().into_raw())
+            }
+        }
+    });
+
+    match res {
+        Ok(val) => val,
+        Err(_) => JObject::null().into_raw(),
+    }
+}
 
 
