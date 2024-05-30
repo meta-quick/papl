@@ -48,6 +48,10 @@ impl SqliteStore {
                 )",
                 (), // empty list of parameters.
             )?;
+            conn.execute(
+                "CREATE UNIQUE INDEX policy_key_IDX ON policy (\"key\");",
+                (), // empty list of parameters.
+            )?;
         }
 
         Ok(SqliteStore { conn })
@@ -64,6 +68,11 @@ impl SqliteStore {
                     version TEXT NOT NULL,
                     policy TEXT NOT NULL
                 )",
+                (), // empty list of parameters.
+            )?;
+            //Create indexes for key
+            conn.execute(
+                "CREATE UNIQUE INDEX policy_key_IDX ON policy (\"key\");",
                 (), // empty list of parameters.
             )?;
         }
