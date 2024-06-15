@@ -170,9 +170,9 @@ JNIEXPORT jstring JNICALL Java_com_datasafe_papl_Engine_nativeStoreGetVersion
 /*
  * Class:     com_datasafe_papl_Engine
  * Method:    nativeStoreGetVersionValue
- * Signature: (JLjava/lang/String;)Ljava/lang/String;
+ * Signature: (JLjava/lang/String;)[Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_com_datasafe_papl_Engine_nativeStoreGetVersionValue
+JNIEXPORT jobjectArray JNICALL Java_com_datasafe_papl_Engine_nativeStoreGetVersionValue
   (JNIEnv *, jclass, jlong, jstring);
 
 /*

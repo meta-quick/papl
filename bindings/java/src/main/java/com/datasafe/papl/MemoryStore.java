@@ -64,9 +64,9 @@ public class MemoryStore implements IStore {
         if (handle == 0 || handle == -1){
             return null;
         }
-        String value = Engine.nativeStoreGetVersionValue(handle, key);
-        if(value != null) {
-            return value.split("<--->");
+        String[] value = Engine.nativeStoreGetVersionValue(handle, key);
+        if(value != null && value.length > 0) {
+            return value;
         }
         return null;
     }

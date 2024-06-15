@@ -445,7 +445,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreGetVersionValue<
     _class: JClass<'local>,
     store_ptr: jlong,
     key: JString<'local>,
-) -> jstring {
+) -> jobjectArray {
     let res = throw_err(env, |env| {
         let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
         let key: String = env.get_string(&key)?.into();
@@ -453,9 +453,15 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreGetVersionValue<
 
         match results {
             Ok((policy,version)) => {
-                let val = format!("{}<--->{}", policy, version);
-                let val = env.new_string(val).unwrap();
-                Ok(val.into_raw())
+                let _policy = env.new_string(policy).unwrap();
+                let _version = env.new_string(version).unwrap();
+                let class = env.find_class("java/lang/String").expect("Failed to find class");
+                let object_array = env.new_object_array(2,class, JObject::null()).expect( "Failed to create array");
+
+                env.set_object_array_element(&object_array, 0, _policy).expect("Failed to set object array element");
+                env.set_object_array_element(&object_array, 1, _version).expect("Failed to set object array element");
+
+                Ok(object_array.into_raw())
             },
             Err(e) => {
                 Ok(JObject::null().into_raw())

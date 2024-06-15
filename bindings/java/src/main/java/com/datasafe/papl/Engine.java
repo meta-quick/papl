@@ -59,10 +59,9 @@ public class Engine implements AutoCloseable {
 
     public static native String nativeStoreGetVersion(long conn, String key);
 
-    public static native String nativeStoreGetVersionValue(long conn, String key);
+    public static native String[] nativeStoreGetVersionValue(long conn, String key);
 
     public static native long nativeStoreDelete(long conn, String key);
-
 
 
     private static native long nativeNewCedarEngine();
@@ -193,9 +192,9 @@ public class Engine implements AutoCloseable {
 
     public String[] storeGetVersionValue(String key) {
         if(storePtr != 0) {
-            String value = nativeStoreGetVersionValue(this.storePtr, key);
-            if(value != null) {
-                return value.split("<--->");
+            String[] value = nativeStoreGetVersionValue(this.storePtr, key);
+            if(value != null && value.length > 0) {
+                return value;
             }
             return null;
         }

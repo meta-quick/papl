@@ -58,4 +58,15 @@ public class FolderRegoPolicyTest extends TestCase {
             e.printStackTrace();
         }
     }
+
+    public void test_foldEval1(){
+        IStore store = new MemoryStore();
+        FolderRegoPolicy policy = new FolderRegoPolicy(store);
+        policy.prepare("a/b/c.txt","package policy\n default deny:=false\n deny { false\n}\n","1");
+        policy.prepare("a/b/","package policy\n deny { true\n}\n","1");
+        ResultSet r = policy.foldEval("data.policy.deny","a/b/c.txt","{}","{}");
+        System.out.println(r.toExpression()[0].value);
+        r = policy.foldEval("data.isRecursive","a/b/c.txt","{}","{}");
+        System.out.println(r.toExpression()[0].value);
+    }
 }

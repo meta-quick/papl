@@ -25,7 +25,7 @@ coverage = []
 
 
 [dependencies]
-regorus = { version = "0.1"}
+regorus = { version = "0.2"}
 anyhow = {version = "1.0", features = ["backtrace"] }
 serde = {version = "1.0", features = ["derive", "rc"] }
 serde_json = "1.0"

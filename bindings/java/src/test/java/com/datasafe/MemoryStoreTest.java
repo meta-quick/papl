@@ -20,6 +20,11 @@ import com.datasafe.papl.MemoryStore;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
+import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 public class MemoryStoreTest extends TestCase {
     public void test_memory_store() throws Exception {
         MemoryStore store = new MemoryStore();
@@ -29,11 +34,22 @@ public class MemoryStoreTest extends TestCase {
         System.out.println(world);
         System.out.println(store.version("hello"));
 
-        System.out.println(store.versionValue("hello")[1]);
         System.out.println(store.versionValue("hello")[0]);
+        System.out.println(store.versionValue("hello")[1]);
 
         store.delete("hello");
         world = store.get("hello");
         System.out.println(world);
+    }
+
+    public void test_base(){
+        //BASE64 decode
+
+        String x =  URLDecoder.decode("aHR0cDovL2xvY2FsaG9zdDo1MTczL3NoYWRvd2RyaXZlL2RvYy1maWxlL3ZpZXc%2FZG9jUmVzb3VyY2VJZD0zNTgwNjA2NTEwNTMwNTcmZmlsZVBhdGg95paH5qGjL09LUi54bHN4JmZ1bGxmaWxlbmFtZT1PS1IueGxzeA%3D%3D");
+
+        byte[]  xx = Base64.getDecoder().decode(x.getBytes());
+
+        System.out.println(new String(xx, StandardCharsets.UTF_8));
+
     }
 }
