@@ -1,3 +1,4 @@
+workspace = { members = ["bindings/python", "bindings/python"] }
 # Copyright 2024 brian <gao.brian@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

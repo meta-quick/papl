@@ -1,0 +1,15 @@
+[package]
+name = "paply"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+name = "paply"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = "0.22"
+regorus = { version = "0.2"}
+papl = { path = "../..", version = "0.1"}
+anyhow = "1.0.82"

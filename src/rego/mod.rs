@@ -143,6 +143,10 @@ impl Engine {
         let result = self.engine.eval_rule(path);
         result
     }
+
+    pub fn get_packages(&self) -> Result<Vec<String>> {
+        self.engine.get_packages()
+    }
 }
 
 #[cfg(test)]
