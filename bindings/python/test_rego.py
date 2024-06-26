@@ -1,10 +1,10 @@
 import paply
 
 def test_new_engine():
-    engine = paply.PaplEngine()
+    engine = paply.PaplRegoEngine()
 
 def test_rego():
-    engine = paply.PaplEngine()
+    engine = paply.PaplRegoEngine()
 
     #add bundles
     engine.add_bundles(["examples"])

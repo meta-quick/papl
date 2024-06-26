@@ -33,13 +33,14 @@ impl Engine {
     }
 
     pub fn create_request(&self, principal: String, action: String, resource: String, json_context: String) -> Result<Request> {
-        let action = action.parse().unwrap();
-        let principal = principal.parse().unwrap();
-        let resource = resource.parse().unwrap();
+        let action = action.trim().to_string().parse().unwrap();
+        let principal = principal.trim().to_string().parse().unwrap();
+        let resource = resource.trim().to_string().parse().unwrap();
         let mut context = Context::empty();
 
         if !json_context.is_empty() {
-           context = Context::from_json_str(&json_context,None).unwrap();
+           let json = json_context.trim().to_string();
+           context = Context::from_json_str(&json,None).unwrap();
         }
 
         let request = Request::new(Some(principal), Some(action), Some(resource), context, None).unwrap();
@@ -52,7 +53,7 @@ impl Engine {
         Ok(())
     }
 
-    pub fn add_entity(&mut self, json: &str,) -> Result<()> {
+    pub fn add_entity(&mut self, json: &str) -> Result<()> {
         let entities = Entities::empty().add_entities_from_json_str(json,None);
         self.entities.replace(entities.unwrap());
         Ok(())

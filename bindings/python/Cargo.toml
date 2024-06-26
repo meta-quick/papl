@@ -12,4 +12,6 @@ crate-type = ["cdylib"]
 pyo3 = "0.22"
 regorus = { version = "0.2"}
 papl = { path = "../..", version = "0.1"}
-anyhow = "1.0.82"
+anyhow = "1.0"
+cedar-policy = "3"
+serde = { version = "1.0", features = ["derive"] }

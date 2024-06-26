@@ -141,15 +141,15 @@ fn to(mut v: Value, py: Python<'_>) -> Result<PyObject> {
 
 
 #[pyclass(unsendable)]
-pub struct PaplEngine {
+pub struct PaplRegoEngine {
     engine: RegoEngine,
 }
 
 #[pymethods]
-impl PaplEngine {
+impl PaplRegoEngine {
     #[new]
     pub fn new() -> Self {
-        PaplEngine {
+        PaplRegoEngine {
             engine: RegoEngine::new(false),
         }
     }

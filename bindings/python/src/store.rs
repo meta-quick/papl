@@ -1,12 +1,9 @@
 use papl::SqliteStore;
 
-use std::collections::{BTreeMap, BTreeSet};
 use pyo3::exceptions::*;
 use pyo3::prelude::*;
 use pyo3::types::*;
 use papl::*;
-use regorus::{Value};
-use anyhow::{Result};
 
 #[pyclass(unsendable)]
 pub struct PaplStore {
