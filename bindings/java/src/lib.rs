@@ -347,14 +347,17 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreSave<'local>(
     key: JString<'local>,
     value: JString<'local>,
     version: JString<'local>,
+    stamp: jlong,
 ) -> jlong {
     let res = throw_err(env, |env| {
         let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
+
         let key: String = env.get_string(&key)?.into();
         let value: String = env.get_string(&value)?.into();
         let version: String = env.get_string(&version)?.into();
+        let stamp = stamp as i64;
 
-        let results = store.save(key, value,version);
+        let results = store.save(key, value, version, stamp);
         match results {
             Ok(val) => {
                 Ok(val as jlong)
@@ -504,4 +507,84 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreGetVersion<'loca
     }
 }
 
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeAllKeysBE<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    store_ptr: jlong,
+    stamp: jlong,
+) -> jobjectArray {
+    let res = throw_err(env, |env| {
+        let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
+        let stamp = stamp as i64;
+
+        let results = store.all_keys_be(stamp);
+
+        match results {
+            Ok(keys) => {
+                let size = keys.len() as i32;
+                let class = env.find_class("java/lang/String").expect("Failed to find class");
+                let key_array = env.new_object_array(size,class, JObject::null()).expect( "Failed to create array");
+
+                //for each key in keys
+                let mut index = 0;
+                for elem in keys.iter() {
+                    let key = env.new_string(elem).unwrap();
+                    env.set_object_array_element(&key_array,index, key).expect("Failed to set object array element");
+                    index += 1;
+                }
+                Ok(key_array.into_raw())
+            },
+            Err(e) => {
+                println!("{}",e.to_string());
+                Ok(JObject::null().into_raw())
+            }
+        }
+    });
+
+    match res {
+        Ok(val) => val,
+        Err(_) => JObject::null().into_raw(),
+    }
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_datasafe_papl_Engine_nativeAllKeysLE<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    store_ptr: jlong,
+    stamp: jlong,
+) -> jobjectArray {
+    let res = throw_err(env, |env| {
+        let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
+        let stamp = stamp as i64;
+        let results = store.all_keys_le(stamp);
+
+        match results {
+            Ok(keys) => {
+                let size = keys.len() as i32;
+                let class = env.find_class("java/lang/String").expect("Failed to find class");
+                let key_array = env.new_object_array(size,class, JObject::null()).expect( "Failed to create array");
+
+                //for each key in keys
+                let mut index = 0;
+                for elem in keys.iter() {
+                    let key = env.new_string(elem).unwrap();
+                    env.set_object_array_element(&key_array,index, key).expect("Failed to set object array element");
+                    index += 1;
+                }
+                Ok(key_array.into_raw())
+            },
+            Err(e) => {
+                println!("{}",e.to_string());
+                Ok(JObject::null().into_raw())
+            }
+        }
+    });
+
+    match res {
+        Ok(val) => val,
+        Err(_) => JObject::null().into_raw(),
+    }
+}
 

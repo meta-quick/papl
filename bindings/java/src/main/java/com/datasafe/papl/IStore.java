@@ -20,9 +20,11 @@ package com.datasafe.papl;
  * @author gaosg
  */
 public interface IStore extends AutoCloseable {
-    public void save(String key,String value,String version);
+    public long save(String key,String value,String version,long stamp);
     public void delete(String key);
     public String get(String key);
     public String version(String key);
     public String[] versionValue(String key);
+    public String[] allKeysLE(long stamp);
+    public String[] allKeysBE(long stamp);
 }

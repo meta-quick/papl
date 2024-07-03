@@ -37,13 +37,13 @@ public class FolderRegoPolicy {
         this.store = store;
     }
 
-    public void prepare(String path,String policy,String version){
-        store.save(path,policy,version);
+    public void prepare(String path,String policy,String version,long stamp){
+        store.save(path,policy,version,stamp);
         evictEngine(path);
     }
 
-    public void prepareData(String path,String policy,String version){
-        store.save(path,policy,version);
+    public void prepareData(String path,String policy,String version,long stamp){
+        store.save(path,policy,version,stamp);
     }
 
     /**

@@ -28,8 +28,8 @@ public class FolderRegoPolicyTest extends TestCase {
         IStore store = new MemoryStore();
         FolderRegoPolicy policy = new FolderRegoPolicy(store);
 
-        policy.prepare("a/b/c.txt","package policy\ndefault allow := false\n","1");
-        policy.prepare("a/b/","package policy\ndefault allow := true\n","1");
+        policy.prepare("a/b/c.txt","package policy\ndefault allow := false\n","1",1);
+        policy.prepare("a/b/","package policy\ndefault allow := true\n","1",1);
 
         ResultSet r = policy.eval("data.policy.allow","a/b/c.txt","{}","{}",false);
         System.out.println(r);
@@ -42,8 +42,8 @@ public class FolderRegoPolicyTest extends TestCase {
     public void test_foldEval(){
         IStore store = new MemoryStore();
         FolderRegoPolicy policy = new FolderRegoPolicy(store);
-        policy.prepare("a/b/c.txt","package policy\ndefault allow := false\n","1");
-        policy.prepare("a/b/","package policy\ndefault list := true\n","1");
+        policy.prepare("a/b/c.txt","package policy\ndefault allow := false\n","1",1);
+        policy.prepare("a/b/","package policy\ndefault list := true\n","1",1);
         ResultSet r = policy.foldEval("data.policy.list","a/b/c.txt","{}","{}");
         System.out.println(r.toExpression()[0].value);
         r = policy.foldEval("data.isRecursive","a/b/c.txt","{}","{}");
@@ -52,7 +52,7 @@ public class FolderRegoPolicyTest extends TestCase {
 
     public void test_storage() {
         try(IStore store = new FileStore("aaa/aa.db")) {
-            store.save("a/b/c","{THIS IS DEMO}","1");
+            store.save("a/b/c","{THIS IS DEMO}","1",1);
             System.out.println(store.get("a/b/c"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,8 +62,8 @@ public class FolderRegoPolicyTest extends TestCase {
     public void test_foldEval1(){
         IStore store = new MemoryStore();
         FolderRegoPolicy policy = new FolderRegoPolicy(store);
-        policy.prepare("a/b/c.txt","package policy\n default deny:=false\n deny { false\n}\n","1");
-        policy.prepare("a/b/","package policy\n deny { true\n}\n","1");
+        policy.prepare("a/b/c.txt","package policy\n default deny:=false\n deny { false\n}\n","1",1);
+        policy.prepare("a/b/","package policy\n deny { true\n}\n","1",1);
         ResultSet r = policy.foldEval("data.policy.deny","a/b/c.txt","{}","{}");
         System.out.println(r.toExpression()[0].value);
         r = policy.foldEval("data.isRecursive","a/b/c.txt","{}","{}");

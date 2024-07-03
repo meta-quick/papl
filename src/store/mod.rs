@@ -42,6 +42,7 @@ impl SqliteStore {
             conn.execute(
                 "CREATE TABLE policy (
                     id INTEGER PRIMARY KEY,
+                    stamp LONG NOT NULL,
                     key TEXT NOT NULL,
                     version TEXT NOT NULL,
                     policy TEXT NOT NULL
@@ -64,6 +65,7 @@ impl SqliteStore {
             conn.execute(
                 "CREATE TABLE policy (
                     id INTEGER PRIMARY KEY,
+                    stamp LONG NOT NULL,
                     key TEXT NOT NULL,
                     version TEXT NOT NULL,
                     policy TEXT NOT NULL
@@ -80,11 +82,12 @@ impl SqliteStore {
         Ok(SqliteStore { conn })
     }
 
-    pub fn save(&self, key: String, policy: String, version: String) -> Result<usize> {
+    pub fn save(&self, key: String, policy: String, version: String, timestamp: i64) -> Result<usize> {
         let conn = &self.conn;
         //update if key exists
-        let mut stmt = conn.prepare("UPDATE policy SET policy = ?1, version = ?2 WHERE key = ?3")?;
-        let result = stmt.execute(&[&policy,&version, &key]);
+        let stamp = timestamp.to_string();
+        let mut stmt = conn.prepare("UPDATE policy SET policy = ?1, version = ?2, stamp = ?4  WHERE key = ?3")?;
+        let result = stmt.execute(&[&policy,&version, &key,&stamp]);
 
         if let Ok(result) = result {
             if result > 0 {
@@ -93,8 +96,8 @@ impl SqliteStore {
         }
 
         //insert if key does not exist
-        let mut stmt = conn.prepare("INSERT INTO policy (key,version, policy) VALUES (?1, ?2, ?3)")?;
-        let result = stmt.execute(&[&key, &version, &policy]);
+        let mut stmt = conn.prepare("INSERT INTO policy (key,policy,version,stamp) VALUES (?1, ?2, ?3,?4)")?;
+        let result = stmt.execute(&[&key, &policy, &version,&stamp]);
         result
     }
 
@@ -144,6 +147,36 @@ impl SqliteStore {
         return Err(rusqlite::Error::QueryReturnedNoRows);
     }
 
+    pub fn all_keys_le(&self, timestamp: i64) -> Result<Vec<String>> {
+        let conn = &self.conn;
+        let stamp = timestamp.to_string();
+        let mut stmt = conn.prepare("SELECT key FROM policy WHERE stamp <= ?1")?;
+        let mut rows = stmt.query(&[&stamp])?;
+
+        let mut keys = Vec::new();
+        while let Ok(Some(row)) = rows.next() {
+            let key: String = row.get(0)?;
+            keys.push(key);
+        }
+
+        Ok(keys)
+    }
+
+    pub fn all_keys_be(&self, timestamp: i64) -> Result<Vec<String>> {
+        let conn = &self.conn;
+        let stamp = timestamp.to_string();
+        let mut stmt = conn.prepare("SELECT key FROM policy WHERE stamp >= ?1")?;
+        let mut rows = stmt.query(&[&stamp])?;
+
+        let mut keys = Vec::new();
+        while let Ok(Some(row)) = rows.next() {
+            let key: String = row.get(0)?;
+            keys.push(key);
+        }
+
+        Ok(keys)
+    }
+
     pub fn delete(&self, key: String) -> Result<usize> {
         let conn = &self.conn;
         let mut stmt = conn.prepare("DELETE FROM policy WHERE key = ?")?;
@@ -165,20 +198,30 @@ mod tests {
     use super::*;
     #[test]
     fn test_sqlite_store() -> Result<()> {
-        let store = SqliteStore::new("demo")?;
-        store.save("key1".to_string(), "policy10".to_string())?;
-        store.save("key2".to_string(), "policy20".to_string())?;
-        store.save("key3".to_string(), "policy30".to_string())?;
+        let store = SqliteStore::new("demo.db")?;
+        store.save("key1".to_string(), "policy10".to_string(), "1.0".to_string(), 1)?;
+        store.save("key2".to_string(), "policy20".to_string(), "2.0".to_string(),2)?;
+        store.save("key3".to_string(), "policy30".to_string(), "3.0".to_string(),3)?;
 
         assert_eq!(store.get("key1".to_string())?, "policy10".to_string());
         assert_eq!(store.get("key2".to_string())?, "policy20".to_string());
+
+        let keys = store.all_keys_be(2);
+        for key in keys.unwrap() {
+            println!("key: {}", key);
+        }
+
+        let keys = store.all_keys_le(2);
+        for key in keys.unwrap() {
+            println!("key: {}", key);
+        }
 
         Ok(())
     }
 
     #[test]
     fn test_sqlite_store_delete() -> Result<()> {
-        let store = SqliteStore::new("demo")?;
+        let store = SqliteStore::new("demo.db")?;
         store.delete("key1".to_string());
         Ok(())
     }

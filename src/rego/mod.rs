@@ -225,7 +225,7 @@ public_server[server] {                             # a server exists in the pub
         let report = engine.engine.get_coverage_report();
         match report {
             Ok(report) => {
-                println!("{}", report.to_colored_string().unwrap());
+                println!("{}", "");
             }
             Err(err) => {
                 println!("{}", err);
@@ -286,7 +286,9 @@ public_server[server] {                             # a server exists in the pub
         let results = engine.eval_query("data.test.message".to_string(),false)?;
         println!("{}", serde_json::to_string_pretty(&results)?);
 
+        #[cfg(feature = "coverage")]
         let report = engine.engine.get_coverage_report()?;
+        #[cfg(feature = "coverage")]
         println!("{}", report.to_colored_string()?);
 
         Ok(())

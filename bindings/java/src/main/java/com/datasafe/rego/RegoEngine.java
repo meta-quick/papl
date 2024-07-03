@@ -75,8 +75,8 @@ public class RegoEngine implements AutoCloseable{
         engine.newMemoryStore();
     }
 
-    public void storeSave(String key,String value,String version) {
-        engine.storeSave(key,value,version);
+    public void storeSave(String key,String value,String version,long stamp) {
+        engine.storeSave(key,value,version,stamp);
     }
 
     public void storeDelKey(String key) {

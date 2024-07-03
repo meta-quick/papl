@@ -16,9 +16,11 @@
 
 package com.datasafe;
 
+import com.datasafe.papl.FileStore;
+import com.datasafe.papl.IStore;
 import com.datasafe.papl.MemoryStore;
-import junit.framework.Assert;
 import junit.framework.TestCase;
+import org.junit.Assert;
 
 import java.net.URL;
 import java.net.URLDecoder;
@@ -29,7 +31,7 @@ public class MemoryStoreTest extends TestCase {
     public void test_memory_store() throws Exception {
         MemoryStore store = new MemoryStore();
 
-        store.save("hello","world","1");
+        store.save("hello","world","1",1);
         String world = store.get("hello");
         System.out.println(world);
         System.out.println(store.version("hello"));
@@ -40,6 +42,31 @@ public class MemoryStoreTest extends TestCase {
         store.delete("hello");
         world = store.get("hello");
         System.out.println(world);
+    }
+
+    public void test_sqlite_store_allkeys() throws Exception {
+        IStore store = new FileStore("test.db");
+        store.save("hello","world","1",1);
+        store.save("hello1","world","1",2);
+        store.save("hello2","world","1",3);
+
+        System.out.println(store.allKeysLE(2).length);
+        System.out.println(store.allKeysBE(2).length);
+    }
+
+    public void test_sqlite_store() throws Exception {
+        IStore store = new FileStore("test.db");
+        store.save("hello","world","1",1);
+        String world = store.get("hello");
+
+        System.out.println(world);
+
+        for (int i = 0; i < 100; i++) {
+            long ret = store.save("hello","world"+i,String.valueOf(i),i);
+            System.out.println(">"+ret+":"+store.version("hello"));
+        }
+
+        store.close();
     }
 
     public void test_base(){

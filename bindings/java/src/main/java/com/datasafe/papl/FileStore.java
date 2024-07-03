@@ -53,11 +53,11 @@ public class FileStore implements IStore {
     }
 
     @Override
-    public void save(String key,String value,String version){
+    public long save(String key,String value,String version,long stamp){
         if (handle == 0 || handle == -1){
-            return;
+            return -1;
         }
-        Engine.nativeStoreSave(this.handle,key,value,version);
+        return Engine.nativeStoreSave(this.handle,key,value,version,stamp);
     }
 
     @Override
@@ -90,6 +90,23 @@ public class FileStore implements IStore {
             return null;
         }
         return Engine.nativeStoreGetVersion(handle,key);
+    }
+
+
+    @Override
+    public String[] allKeysBE(long stamp) {
+        if (handle == 0 || handle == -1){
+            return null;
+        }
+        return Engine.nativeAllKeysBE(handle,stamp);
+    }
+
+    @Override
+    public String[] allKeysLE(long stamp) {
+        if (handle == 0 || handle == -1){
+            return null;
+        }
+        return Engine.nativeAllKeysLE(handle,stamp);
     }
 
     @Override

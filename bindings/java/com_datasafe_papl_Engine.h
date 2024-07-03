@@ -146,10 +146,10 @@ JNIEXPORT void JNICALL Java_com_datasafe_papl_Engine_nativeCloseStore
 /*
  * Class:     com_datasafe_papl_Engine
  * Method:    nativeStoreSave
- * Signature: (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)J
+ * Signature: (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;J)J
  */
 JNIEXPORT jlong JNICALL Java_com_datasafe_papl_Engine_nativeStoreSave
-  (JNIEnv *, jclass, jlong, jstring, jstring, jstring);
+  (JNIEnv *, jclass, jlong, jstring, jstring, jstring, jlong);
 
 /*
  * Class:     com_datasafe_papl_Engine
@@ -198,6 +198,22 @@ JNIEXPORT jlong JNICALL Java_com_datasafe_papl_Engine_nativeNewCedarEngine
  */
 JNIEXPORT jlong JNICALL Java_com_datasafe_papl_Engine_nativeCloseCedarEngine
   (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     com_datasafe_papl_Engine
+ * Method:    nativeAllKeysLE
+ * Signature: (JJ)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_com_datasafe_papl_Engine_nativeAllKeysLE
+  (JNIEnv *, jclass, jlong, jlong);
+
+/*
+ * Class:     com_datasafe_papl_Engine
+ * Method:    nativeAllKeysBE
+ * Signature: (JJ)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_com_datasafe_papl_Engine_nativeAllKeysBE
+  (JNIEnv *, jclass, jlong, jlong);
 
 #ifdef __cplusplus
 }

@@ -53,7 +53,7 @@ public class Engine implements AutoCloseable {
     public static native long nativeNewMemoryStore();
     public static native void nativeCloseStore(long conn);
 
-    public static native long nativeStoreSave(long conn, String key, String value,String version);
+    public static native long nativeStoreSave(long conn, String key, String value,String version,long stamp);
 
     public static native String nativeStoreGet(long conn, String key);
 
@@ -67,6 +67,9 @@ public class Engine implements AutoCloseable {
     private static native long nativeNewCedarEngine();
     private static native long nativeCloseCedarEngine(long enginePtr);
 
+    public static native String[] nativeAllKeysLE(long conn,long stamp);
+
+    public static native String[] nativeAllKeysBE(long conn,long stamp);
 
     private final ReentrantLock mutex = new ReentrantLock();
 
@@ -176,9 +179,9 @@ public class Engine implements AutoCloseable {
         }
     }
 
-    public long storeSave(String key,String value, String version){
+    public long storeSave(String key,String value, String version,long stamp){
         if(storePtr != 0){
-            return nativeStoreSave(this.storePtr,key,value,version);
+            return nativeStoreSave(this.storePtr,key,value,version,stamp);
         }
         return 0;
     }
@@ -214,6 +217,20 @@ public class Engine implements AutoCloseable {
             return nativeStoreDelete(this.storePtr, key);
         }
         return 0;
+    }
+
+    public String[] allKeysLE(long stamp){
+        if(storePtr != 0) {
+            return nativeAllKeysLE(this.storePtr,stamp);
+        }
+        return null;
+    }
+
+    public String[] allKeysBE(long stamp){
+        if(storePtr != 0) {
+            return nativeAllKeysBE(this.storePtr,stamp);
+        }
+        return null;
     }
 
     @Override

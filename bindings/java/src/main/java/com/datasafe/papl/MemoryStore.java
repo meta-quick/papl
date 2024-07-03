@@ -28,11 +28,11 @@ public class MemoryStore implements IStore {
     }
 
     @Override
-    public void save(String key,String value,String version){
+    public long save(String key,String value,String version,long stamp){
         if (handle == 0 || handle == -1){
-            return;
+            return -1;
         }
-        Engine.nativeStoreSave(this.handle,key,value,version);
+        return Engine.nativeStoreSave(this.handle,key,value,version,stamp);
     }
 
     @Override
@@ -69,6 +69,22 @@ public class MemoryStore implements IStore {
             return value;
         }
         return null;
+    }
+
+    @Override
+    public String[] allKeysLE(long stamp) {
+        if (handle == 0 || handle == -1){
+            return null;
+        }
+        return Engine.nativeAllKeysLE(handle,stamp);
+    }
+
+    @Override
+    public String[] allKeysBE(long stamp) {
+        if (handle == 0 || handle == -1){
+            return null;
+        }
+        return Engine.nativeAllKeysBE(handle,stamp);
     }
 
     @Override
