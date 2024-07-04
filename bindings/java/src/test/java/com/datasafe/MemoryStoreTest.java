@@ -54,6 +54,28 @@ public class MemoryStoreTest extends TestCase {
         System.out.println(store.allKeysBE(2).length);
     }
 
+    public void test_sqlite_store_pageable() throws Exception {
+        IStore store = new FileStore("test.db");
+        store.save("hello","world","1",1);
+        store.save("hello1","world","1",2);
+        store.save("hello2","world","1",3);
+
+        String[] keys = store.AllKeysBEPageable(2,1,10);
+        for (String key : keys) {
+            System.out.println(key);
+        }
+    }
+
+    public void test_sqlite_store_evict() throws Exception {
+        IStore store = new FileStore("test.db");
+        store.save("hello","world","1",1);
+        store.save("hello1","world","1",2);
+        store.save("hello2","world","1",3);
+
+        long count = store.EvictLE(3);
+        System.out.println(count);
+    }
+
     public void test_sqlite_store() throws Exception {
         IStore store = new FileStore("test.db");
         store.save("hello","world","1",1);

@@ -88,6 +88,30 @@ public class MemoryStore implements IStore {
     }
 
     @Override
+    public String[] AllKeysBEPageable(long stamp, long page, long size) {
+        if (handle == 0 || handle == -1){
+            return null;
+        }
+        return Engine.nativeAllKeysBEPageable(handle,stamp,page,size);
+    }
+
+    @Override
+    public long EvictLE(long stamp) {
+        if (handle == 0 || handle == -1){
+            return 0;
+        }
+        return Engine.nativeEvictLE(handle,stamp);
+    }
+
+    @Override
+    public long EvictBE(long stamp) {
+        if (handle == 0 || handle == -1){
+            return 0;
+        }
+        return Engine.nativeEvictBE(handle,stamp);
+    }
+
+    @Override
     public void close() throws Exception {
         if (handle == 0 || handle == -1){
             return;

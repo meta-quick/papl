@@ -65,11 +65,18 @@ public class Engine implements AutoCloseable {
 
 
     private static native long nativeNewCedarEngine();
+
     private static native long nativeCloseCedarEngine(long enginePtr);
 
     public static native String[] nativeAllKeysLE(long conn,long stamp);
 
     public static native String[] nativeAllKeysBE(long conn,long stamp);
+
+    public static native String[] nativeAllKeysBEPageable(long conn,long stamp,long page,long size);
+
+    public static native long nativeEvictLE(long conn,long stamp);
+
+    public static native long nativeEvictBE(long conn,long stamp);
 
     private final ReentrantLock mutex = new ReentrantLock();
 
@@ -231,6 +238,27 @@ public class Engine implements AutoCloseable {
             return nativeAllKeysBE(this.storePtr,stamp);
         }
         return null;
+    }
+
+    public String[] allKeysBEPageable(long stamp,long page,long size){
+        if(storePtr != 0) {
+            return nativeAllKeysBEPageable(this.storePtr,stamp,page,size);
+        }
+        return null;
+    }
+
+    public long evictLE(long stamp){
+        if(storePtr != 0) {
+            return nativeEvictLE(this.storePtr,stamp);
+        }
+        return 0;
+    }
+
+    public long evictBE(long stamp){
+        if(storePtr != 0) {
+            return nativeEvictBE(this.storePtr,stamp);
+        }
+        return 0;
     }
 
     @Override

@@ -177,6 +177,54 @@ impl SqliteStore {
         Ok(keys)
     }
 
+    pub fn all_keys_be_pageable(&self,timestamp: i64, page: i64, size: i64) -> Result<Vec<String>> {
+        let conn = &self.conn;
+        let stamp = timestamp.to_string();
+        let offset = (page - 1) * size;
+        let offset = offset.to_string();
+        if size == 0 {
+            return Ok(Vec::new());
+        }
+
+        let size = size.to_string();
+        let mut stmt = conn.prepare("SELECT key FROM policy WHERE stamp >= ?1 LIMIT ?2 OFFSET ?3")?;
+        let mut rows = stmt.query(&[&stamp,&size,&offset])?;
+
+        let mut keys = Vec::new();
+        while let Ok(Some(row)) = rows.next() {
+            let key: String = row.get(0)?;
+            keys.push(key);
+        }
+
+        Ok(keys)
+    }
+
+    pub fn evict_be(&self, timestamp: i64) -> Result<usize> {
+        let conn = &self.conn;
+
+        if table_exists(&conn, "policy") {
+            let stamp = timestamp.to_string();
+            let mut stmt = conn.prepare("DELETE FROM policy WHERE stamp >= ?1")?;
+            let result = stmt.execute(&[&stamp]);
+            result
+        } else {
+            Ok(0)
+        }
+    }
+
+    pub fn evict_le(&self, timestamp: i64) -> Result<usize> {
+        let conn = &self.conn;
+
+        if table_exists(&conn, "policy") {
+            let stamp = timestamp.to_string();
+            let mut stmt = conn.prepare("DELETE FROM policy WHERE stamp <= ?1")?;
+            let result = stmt.execute(&[&stamp]);
+            result
+        } else {
+            Ok(0)
+        }
+    }
+
     pub fn delete(&self, key: String) -> Result<usize> {
         let conn = &self.conn;
         let mut stmt = conn.prepare("DELETE FROM policy WHERE key = ?")?;
@@ -215,6 +263,25 @@ mod tests {
         for key in keys.unwrap() {
             println!("key: {}", key);
         }
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_sqlite_pageable() -> Result<()> {
+        let store = SqliteStore::new("demo.db")?;
+        store.save("key1".to_string(), "policy10".to_string(), "1.0".to_string(), 1)?;
+        store.save("key2".to_string(), "policy20".to_string(), "2.0".to_string(),2)?;
+        store.save("key3".to_string(), "policy30".to_string(), "3.0".to_string(),3)?;
+
+        assert_eq!(store.get("key1".to_string())?, "policy10".to_string());
+        assert_eq!(store.get("key2".to_string())?, "policy20".to_string());
+
+        let keys = store.all_keys_be_pageable(1, 2, 2);
+        for key in keys.unwrap() {
+            println!("key: {}", key);
+        }
+
 
         Ok(())
     }

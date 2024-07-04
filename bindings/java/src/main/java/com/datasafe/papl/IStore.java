@@ -27,4 +27,7 @@ public interface IStore extends AutoCloseable {
     public String[] versionValue(String key);
     public String[] allKeysLE(long stamp);
     public String[] allKeysBE(long stamp);
+    public String[] AllKeysBEPageable(long stamp,long page,long size);
+    public long EvictLE(long stamp);
+    public long EvictBE(long stamp);
 }

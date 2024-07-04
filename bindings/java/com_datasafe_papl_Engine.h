@@ -215,6 +215,30 @@ JNIEXPORT jobjectArray JNICALL Java_com_datasafe_papl_Engine_nativeAllKeysLE
 JNIEXPORT jobjectArray JNICALL Java_com_datasafe_papl_Engine_nativeAllKeysBE
   (JNIEnv *, jclass, jlong, jlong);
 
+/*
+ * Class:     com_datasafe_papl_Engine
+ * Method:    nativeAllKeysBEPageable
+ * Signature: (JJJJ)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_com_datasafe_papl_Engine_nativeAllKeysBEPageable
+  (JNIEnv *, jclass, jlong, jlong, jlong, jlong);
+
+/*
+ * Class:     com_datasafe_papl_Engine
+ * Method:    nativeEvictLE
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_com_datasafe_papl_Engine_nativeEvictLE
+  (JNIEnv *, jclass, jlong, jlong);
+
+/*
+ * Class:     com_datasafe_papl_Engine
+ * Method:    nativeEvictBE
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_com_datasafe_papl_Engine_nativeEvictBE
+  (JNIEnv *, jclass, jlong, jlong);
+
 #ifdef __cplusplus
 }
 #endif
