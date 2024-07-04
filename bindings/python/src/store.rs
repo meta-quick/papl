@@ -76,5 +76,53 @@ impl PaplStore {
             Err(e) => Err(PyErr::new::<PyException, _>(e.to_string()))
         }
     }
+
+    pub fn keys_be(&self,stamp: i64) -> PyResult<Vec<String>> {
+        let result = self.store.all_keys_be(stamp);
+        match result {
+            Ok(result) => Ok(result),
+            Err(e) => Err(PyErr::new::<PyException, _>(e.to_string()))
+        }
+    }
+
+    pub fn keys_le(&self,stamp: i64) -> PyResult<Vec<String>> {
+        let result = self.store.all_keys_le(stamp);
+        match result {
+            Ok(result) => Ok(result),
+            Err(e) => Err(PyErr::new::<PyException, _>(e.to_string()))
+        }
+    }
+
+    pub fn keys_le_pageable(&self,stamp: i64, page: i64, size: i64) -> PyResult<Vec<String>> {
+        let result = self.store.all_keys_be_pageable(stamp, page, size);
+        match result {
+            Ok(result) => Ok(result),
+            Err(e) => Err(PyErr::new::<PyException, _>(e.to_string()))
+        }
+    }
+
+    pub fn keys_be_pageable(&self,stamp: i64, page: i64, size: i64) -> PyResult<Vec<String>>{
+        let result = self.store.all_keys_be_pageable(stamp, page, size);
+        match result {
+            Ok(result) => Ok(result),
+            Err(e) => Err(PyErr::new::<PyException, _>(e.to_string()))
+        }
+    }
+
+    pub fn evict_be(&self, stamp: i64) -> PyResult<usize> {
+        let result = self.store.evict_be(stamp);
+        match result {
+            Ok(result) => Ok(result),
+            Err(e) => Err(PyErr::new::<PyException, _>(e.to_string()))
+        }
+    }
+
+    pub fn evict_le(&self, stamp: i64) -> PyResult<usize> {
+        let result = self.store.evict_le(stamp);
+        match result {
+            Ok(result) => Ok(result),
+            Err(e) => Err(PyErr::new::<PyException, _>(e.to_string()))
+        }
+    }
 }
 
