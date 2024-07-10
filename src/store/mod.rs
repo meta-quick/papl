@@ -89,16 +89,37 @@ impl SqliteStore {
         let mut stmt = conn.prepare("UPDATE policy SET policy = ?1, version = ?2, stamp = ?4  WHERE key = ?3")?;
         let result = stmt.execute(&[&policy,&version, &key,&stamp]);
 
-        if let Ok(result) = result {
-            if result > 0 {
-                return Ok(result);
+        match result {
+            Ok(result) => {
+                if result > 0 {
+                    return Ok(result);
+                } else {
+                    eprintln!("Error updating policy: key: {}", key);
+                }
+            },
+            Err(e) => {
+                eprintln!("Error updating policy: key: {}, {}",key, e);
             }
         }
 
         //insert if key does not exist
         let mut stmt = conn.prepare("INSERT INTO policy (key,policy,version,stamp) VALUES (?1, ?2, ?3,?4)")?;
         let result = stmt.execute(&[&key, &policy, &version,&stamp]);
-        result
+
+        match result {
+            Ok(result) => {
+                if result > 0 {
+                    return Ok(result);
+                } else {
+                    eprintln!("Error inserting policy: key: {}", key);
+                    return Err(rusqlite::Error::QueryReturnedNoRows);
+                }
+            },
+            Err(e) => {
+                eprintln!("Error inserting policy: key: {}, {}", key,e);
+                return Err(e);
+            }
+        }
     }
 
     pub fn get(&self, key: String) -> Result<String> {
@@ -249,6 +270,7 @@ mod tests {
         let store = SqliteStore::new("demo.db")?;
         store.save("key1".to_string(), "policy10".to_string(), "1.0".to_string(), 1)?;
         store.save("key2".to_string(), "policy20".to_string(), "2.0".to_string(),2)?;
+        store.save("key3".to_string(), "policy30".to_string(), "3.0".to_string(),3)?;
         store.save("key3".to_string(), "policy30".to_string(), "3.0".to_string(),3)?;
 
         assert_eq!(store.get("key1".to_string())?, "policy10".to_string());
