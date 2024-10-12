@@ -1445,7 +1445,7 @@ name = "papl-java"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "cedar-policy 3.4.1",
+ "cedar-policy 4.2.1",
  "jni",
  "papl",
  "serde_json",
