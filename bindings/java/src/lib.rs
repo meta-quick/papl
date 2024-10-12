@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use std::ptr::{addr_of, slice_from_raw_parts_mut};
 use anyhow::Result;
 use jni::objects::{JClass, JObject, JString,JObjectArray};
 use jni::sys::{jlong, jobjectArray, jstring};
@@ -190,7 +189,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeRegoClearData<'local>
     _class: JClass<'local>,
     engine_ptr: jlong,
 ) {
-    let _ = throw_err(env, |env| {
+    let _ = throw_err(env, |_env| {
         let engine = unsafe { &mut *(engine_ptr as *mut RegoEngine) };
         engine.clear_data();
         Ok(())
@@ -225,10 +224,10 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeCedarAddPolicy<'local
     engine_ptr: jlong,
     policy: JString<'local>,
 ) {
-    let res = throw_err(env, |env| {
+    let _res = throw_err(env, |env| {
         let engine = unsafe { &mut *(engine_ptr as *mut CedarEngine) };
         let policy: String = env.get_string(&policy)?.into();
-        let results = engine.add_policy(policy)?;
+        let _results = engine.add_policy(policy)?;
         Ok(())
     });
 }
@@ -240,10 +239,10 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeCedarAddEntity<'local
     engine_ptr: jlong,
     enitity: JString<'local>,
 ) {
-    let res = throw_err(env, |env| {
+    let _ = throw_err(env, |env| {
         let engine = unsafe { &mut *(engine_ptr as *mut CedarEngine) };
         let enitity: String = env.get_string(&enitity)?.into();
-        let results = engine.add_entity(enitity.as_str());
+        let _results = engine.add_entity(enitity.as_str());
         Ok(())
     });
 }
@@ -302,7 +301,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeNewStore<'local>(
                 let store = Box::into_raw(Box::new(store)) as jlong;
                 Ok(store)
             },
-            Err(e) => {
+            Err(_) => {
                 Ok(-1)
             }
         }
@@ -319,7 +318,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeNewMemoryStore<'local
     env: JNIEnv<'local>,
     _class: JClass<'local>,
 ) -> jlong {
-    let result = throw_err(env, |env| {
+    let result = throw_err(env, |_env| {
         let memory = SqliteStore::new_in_memory();
 
         match memory {
@@ -327,7 +326,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeNewMemoryStore<'local
                 let store = Box::into_raw(Box::new(store)) as jlong;
                 Ok(store)
             },
-            Err(e) => {
+            Err(_) => {
                 Ok(-1)
             }
         }
@@ -362,7 +361,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreSave<'local>(
             Ok(val) => {
                 Ok(val as jlong)
             },
-            Err(e) => {
+            Err(_) => {
                 Ok(0)
             }
         }
@@ -390,7 +389,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreGet<'local>(
                 let val = env.new_string(val).unwrap();
                 Ok(val.into_raw())
             },
-            Err(e) => {
+            Err(_) => {
                 Ok(JObject::null().into_raw())
             }
         }
@@ -418,7 +417,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreDelete<'local>(
             Ok(val) => {
                 Ok(val as jlong)
             },
-            Err(e) => {
+            Err(_) => {
                 Ok(0)
             }
         }
@@ -495,7 +494,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreGetVersion<'loca
                 let val = env.new_string(val).unwrap();
                 Ok(val.into_raw())
             },
-            Err(e) => {
+            Err(_) => {
                 Ok(JObject::null().into_raw())
             }
         }
