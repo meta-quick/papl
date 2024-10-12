@@ -23,7 +23,7 @@ pub struct Engine {
 }
 
 impl Engine {
-    pub fn new(enable_coverage: bool) -> Self {
+    pub fn new(_enable_coverage: bool) -> Self {
         let mut engine = Self {
             engine: regorus::Engine::new(),
             #[cfg(feature = "coverage")]
@@ -31,7 +31,7 @@ impl Engine {
         };
 
         #[cfg(feature = "coverage")]
-        if enable_coverage {
+        if _enable_coverage {
             engine.engine.set_enable_coverage(true);
         }
 

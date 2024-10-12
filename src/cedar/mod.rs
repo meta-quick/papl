@@ -43,13 +43,13 @@ impl Engine {
            context = Context::from_json_str(&json,None).unwrap();
         }
 
-        let request = Request::new(Some(principal), Some(action), Some(resource), context, None).unwrap();
+        let request = Request::new(principal, action, resource, context, None).unwrap();
         Ok(request)
     }
 
     pub fn add_policy(&mut self, policy: String) -> Result<()> {
         let policy  = policy.parse().unwrap();
-        self.policy.add(policy);
+        let _ = self.policy.add(policy);
         Ok(())
     }
 
