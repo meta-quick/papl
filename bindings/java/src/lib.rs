@@ -431,13 +431,13 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreDelete<'local>(
 
 #[no_mangle]
 pub extern "system" fn Java_com_datasafe_papl_Engine_nativeCloseStore<'local>(
-    env: JNIEnv<'local>,
+    _env: JNIEnv<'local>,
     _class: JClass<'local>,
     store_ptr: jlong,
 ) {
     unsafe {
-        let _engine = Box::from_raw(store_ptr as *mut SqliteStore);
-        _engine.close();
+        let engine = Box::from_raw(store_ptr as *mut SqliteStore);
+        let _ =  engine.close();
     }
 }
 
@@ -465,7 +465,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeStoreGetVersionValue<
 
                 Ok(object_array.into_raw())
             },
-            Err(e) => {
+            Err(_) => {
                 Ok(JObject::null().into_raw())
             }
         }
