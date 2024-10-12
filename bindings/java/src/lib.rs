@@ -600,7 +600,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeAllKeysBEPageable<'lo
         let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
         let stamp = stamp as i64;
         let page = page as i64;
-        let szie = size as i64;
+        let _size = size as i64;
         let results = store.all_keys_be_pageable(stamp, page, size);
 
         match results {
@@ -638,7 +638,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeEvictBE<'local>(
     store_ptr: jlong,
     stamp: jlong,
 ) -> jlong {
-    let res = throw_err(env, |env| {
+    let res = throw_err(env, |_env| {
         let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
         let stamp = stamp as i64;
         let results = store.evict_be(stamp);
@@ -646,7 +646,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeEvictBE<'local>(
             Ok(keys) => {
                 Ok(keys)
             },
-            Err(e) => {
+            Err(_) => {
                 Ok(0)
             }
         }
@@ -665,7 +665,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeEvictLE<'local>(
     store_ptr: jlong,
     stamp: jlong,
 ) -> jlong {
-    let res = throw_err(env, |env| {
+    let res = throw_err(env, |_env| {
         let store = unsafe { &mut *(store_ptr as *mut SqliteStore) };
         let stamp = stamp as i64;
         let results = store.evict_le(stamp);
@@ -673,7 +673,7 @@ pub extern "system" fn Java_com_datasafe_papl_Engine_nativeEvictLE<'local>(
             Ok(keys) => {
                 Ok(keys)
             },
-            Err(e) => {
+            Err(_) => {
                 Ok(0)
             }
         }
