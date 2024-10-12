@@ -20,7 +20,7 @@ pub struct SqliteStore {
 
 fn table_exists(conn: &Connection, table_name: &str) -> bool {
     let mut stmt = conn.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name=?").unwrap();
-    let mut rows = stmt.query(&[&table_name]);
+    let rows = stmt.query(&[&table_name]);
 
     if let Ok(mut rows) = rows {
         if let Ok(Some(row)) = rows.next() {
@@ -125,7 +125,7 @@ impl SqliteStore {
     pub fn get(&self, key: String) -> Result<String> {
         let conn = &self.conn;
         let mut stmt = conn.prepare("SELECT policy FROM policy WHERE key = ?")?;
-        let mut rows = stmt.query(&[&key]);
+        let rows = stmt.query(&[&key]);
 
 
         if let Ok(mut rows) = rows {
@@ -140,7 +140,7 @@ impl SqliteStore {
     pub fn version(&self, key: String) -> Result<String> {
         let conn = &self.conn;
         let mut stmt = conn.prepare("SELECT version FROM policy WHERE key = ?")?;
-        let mut rows = stmt.query(&[&key]);
+        let rows = stmt.query(&[&key]);
 
 
         if let Ok(mut rows) = rows {
@@ -155,7 +155,7 @@ impl SqliteStore {
     pub fn version_value(&self, key: String) -> Result<(String,String)> {
         let conn = &self.conn;
         let mut stmt = conn.prepare("SELECT policy,version FROM policy WHERE key = ?")?;
-        let mut rows = stmt.query(&[&key]);
+        let  rows = stmt.query(&[&key]);
 
 
         if let Ok(mut rows) = rows {
@@ -254,7 +254,7 @@ impl SqliteStore {
     }
 
     pub fn close(&self) -> Result<()> {
-        let conn = &self.conn;
+        let _conn = &self.conn;
         Ok(())
     }
 }

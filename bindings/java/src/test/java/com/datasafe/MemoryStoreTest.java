@@ -94,11 +94,11 @@ public class MemoryStoreTest extends TestCase {
     public void test_base(){
         //BASE64 decode
 
-        String x =  URLDecoder.decode("aHR0cDovL2xvY2FsaG9zdDo1MTczL3NoYWRvd2RyaXZlL2RvYy1maWxlL3ZpZXc%2FZG9jUmVzb3VyY2VJZD0zNTgwNjA2NTEwNTMwNTcmZmlsZVBhdGg95paH5qGjL09LUi54bHN4JmZ1bGxmaWxlbmFtZT1PS1IueGxzeA%3D%3D");
+        //String x =  URLDecoder.decode("aHR0cDovL2xvY2FsaG9zdDo1MTczL3NoYWRvd2RyaXZlL2RvYy1maWxlL3ZpZXc%2FZG9jUmVzb3VyY2VJZD0zNTgwNjA2NTEwNTMwNTcmZmlsZVBhdGg95paH5qGjL09LUi54bHN4JmZ1bGxmaWxlbmFtZT1PS1IueGxzeA%3D%3D");
 
-        byte[]  xx = Base64.getDecoder().decode(x.getBytes());
-
-        System.out.println(new String(xx, StandardCharsets.UTF_8));
+//        byte[]  xx = Base64.getDecoder().decode(x.getBytes());
+//
+//        System.out.println(new String(xx, StandardCharsets.UTF_8));
 
     }
 }
