@@ -5,8 +5,13 @@
 .classpath
 .settings
 .DS_Store
+/bindings/java/native
+bindings/java/native
 /bindings/java/.idea
 /bindings/java/.project
+/bindings/java/native
 /bindings/java/.classpath
 /bindings/java/.settings
 /bindings/java/.DS_Store
+/native
+native
