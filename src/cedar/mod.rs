@@ -83,8 +83,7 @@ impl Engine {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use anyhow::{bail, Ok, Result};
-    use cedar_policy::*;
+    use anyhow::{Ok, Result};
 
     #[test]
     fn test_add_policy() -> Result<()> {
@@ -93,12 +92,12 @@ mod tests {
         const POLICY_SRC: &str = r#"
 permit(principal == User::"alice", action == Action::"view", resource == File::"93");
 "#;
-        cedar.add_policy(POLICY_SRC.to_string());
+        let _ = cedar.add_policy(POLICY_SRC.to_string());
         let action = r#"Action::"view""#.parse().unwrap();
         let alice = r#"User::"alice""#.parse().unwrap();
         let file = r#"File::"931""#.parse().unwrap();
 
-        let request = Request::new(Some(alice), Some(action), Some(file), Context::empty(), None).unwrap();
+        let request = Request::new(alice, action, file, Context::empty(), None).unwrap();
 
         let answer = cedar.authorize(request);
 
@@ -119,7 +118,7 @@ permit(principal == User::"alice", action == Action::"view", resource == File::"
         let action = r#"Action::"view""#.parse().unwrap();
         let alice = r#"User::"alice""#.parse().unwrap();
         let file = r#"File::"93""#.parse().unwrap();
-        let request = Request::new(Some(alice), Some(action), Some(file), Context::empty(), None).unwrap();
+        let request = Request::new(alice, action,file, Context::empty(), None).unwrap();
 
         let entities = Entities::empty();
         let authorizer = Authorizer::new();
@@ -131,7 +130,7 @@ permit(principal == User::"alice", action == Action::"view", resource == File::"
         let action = r#"Action::"view""#.parse().unwrap();
         let bob = r#"User::"bob""#.parse().unwrap();
         let file = r#"File::"93""#.parse().unwrap();
-        let request = Request::new(Some(bob), Some(action), Some(file), Context::empty(), None).unwrap();
+        let request = Request::new(bob, action, file, Context::empty(), None).unwrap();
 
         let answer = authorizer.is_authorized(&request, &policy, &entities);
 

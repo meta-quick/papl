@@ -224,7 +224,7 @@ public_server[server] {                             # a server exists in the pub
 
         let report = engine.engine.get_coverage_report();
         match report {
-            Ok(report) => {
+            Ok(_report) => {
                 println!("{}", "");
             }
             Err(err) => {
@@ -261,7 +261,7 @@ public_server[server] {                             # a server exists in the pub
     fn test_eval_xquery() -> Result<() > {
         let mut engine = Engine::new(false);
 
-        engine.add_policy_from_string("hello.rego".to_string(),            r#"
+        let _ = engine.add_policy_from_string("hello.rego".to_string(),            r#"
            package test
            message = "Hello, World!"
         "#.to_string());
@@ -277,7 +277,7 @@ public_server[server] {                             # a server exists in the pub
     fn test_eval_coverage() -> Result<() > {
         let mut engine = Engine::new(true);
 
-        engine.add_policy_from_string("hello.rego".to_string(),            r#"
+        let _ = engine.add_policy_from_string("hello.rego".to_string(),            r#"
            package test
            message = "Hello, World!"
         "#.to_string());
