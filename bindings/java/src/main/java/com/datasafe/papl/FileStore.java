@@ -17,12 +17,15 @@
 package com.datasafe.papl;
 
 import java.io.File;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author gaosg
  */
 public class FileStore implements IStore {
     private long handle = 0;
+    private final Lock lock = new ReentrantLock();
 
     public static boolean ensureParentFolderExists(String filePath) {
         if (filePath == null || filePath.isEmpty()) {
@@ -57,7 +60,10 @@ public class FileStore implements IStore {
         if (handle == 0 || handle == -1){
             return -1;
         }
-        return Engine.nativeStoreSave(this.handle,key,value,version,stamp);
+
+        try (DeferLock deferLock = new DeferLock(lock)) {
+            return Engine.nativeStoreSave(this.handle,key,value,version,stamp);
+        }
     }
 
     @Override
@@ -65,7 +71,9 @@ public class FileStore implements IStore {
         if (handle == 0 || handle == -1){
             return;
         }
-        Engine.nativeStoreDelete(handle,key);
+        try (DeferLock deferLock = new DeferLock(lock)) {
+            Engine.nativeStoreDelete(handle, key);
+        }
     }
 
     @Override
@@ -73,7 +81,9 @@ public class FileStore implements IStore {
         if (handle == 0 || handle == -1){
             return null;
         }
-        return Engine.nativeStoreGet(handle,key);
+        try (DeferLock deferLock = new DeferLock(lock)) {
+            return Engine.nativeStoreGet(handle, key);
+        }
     }
 
     @Override
@@ -81,7 +91,9 @@ public class FileStore implements IStore {
         if (handle == 0 || handle == -1){
             return;
         }
-        Engine.nativeCloseStore(handle);
+        try (DeferLock deferLock = new DeferLock(lock)) {
+            Engine.nativeCloseStore(handle);
+        }
     }
 
     @Override
@@ -89,7 +101,9 @@ public class FileStore implements IStore {
         if (handle == 0 || handle == -1){
             return null;
         }
-        return Engine.nativeStoreGetVersion(handle,key);
+        try (DeferLock deferLock = new DeferLock(lock)) {
+            return Engine.nativeStoreGetVersion(handle, key);
+        }
     }
 
 
@@ -98,7 +112,9 @@ public class FileStore implements IStore {
         if (handle == 0 || handle == -1){
             return null;
         }
-        return Engine.nativeAllKeysBE(handle,stamp);
+        try (DeferLock deferLock = new DeferLock(lock)) {
+            return Engine.nativeAllKeysBE(handle, stamp);
+        }
     }
 
     @Override
@@ -106,7 +122,9 @@ public class FileStore implements IStore {
         if (handle == 0 || handle == -1){
             return null;
         }
-        return Engine.nativeAllKeysBEPageable(handle,stamp,page,size);
+        try (DeferLock deferLock = new DeferLock(lock)) {
+            return Engine.nativeAllKeysBEPageable(handle, stamp, page, size);
+        }
     }
 
     @Override
@@ -114,7 +132,9 @@ public class FileStore implements IStore {
         if (handle == 0 || handle == -1){
             return 0;
         }
-        return Engine.nativeEvictLE(handle,stamp);
+        try (DeferLock deferLock = new DeferLock(lock)) {
+            return Engine.nativeEvictLE(handle, stamp);
+        }
     }
 
     @Override
@@ -122,7 +142,9 @@ public class FileStore implements IStore {
         if (handle == 0 || handle == -1){
             return 0;
         }
-        return Engine.nativeEvictBE(handle,stamp);
+        try (DeferLock deferLock = new DeferLock(lock)) {
+            return Engine.nativeEvictBE(handle, stamp);
+        }
     }
 
     @Override
@@ -130,7 +152,9 @@ public class FileStore implements IStore {
         if (handle == 0 || handle == -1){
             return null;
         }
-        return Engine.nativeAllKeysLE(handle,stamp);
+        {
+            return Engine.nativeAllKeysLE(handle, stamp);
+        }
     }
 
     @Override
@@ -138,10 +162,12 @@ public class FileStore implements IStore {
         if (handle == 0 || handle == -1){
             return null;
         }
-        String[] value = Engine.nativeStoreGetVersionValue(handle, key);
-        if(value != null && value.length > 0) {
-            return value;
+        try (DeferLock deferLock = new DeferLock(lock)) {
+            String[] value = Engine.nativeStoreGetVersionValue(handle, key);
+            if (value != null && value.length > 0) {
+                return value;
+            }
+            return null;
         }
-        return null;
     }
 }

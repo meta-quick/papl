@@ -21,7 +21,7 @@
 
     <groupId>com.datasafe.papl</groupId>
     <artifactId>papl-binding-java</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.1</version>
     <name>papl Java</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
